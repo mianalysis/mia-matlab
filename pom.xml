@@ -7,12 +7,109 @@
     <groupId>wbif.sjx</groupId>
     <artifactId>MIA_MATLAB</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>MIA_MATLAB</name>
+    <url>https://github.com/SJCross/MIA_MATLAB</url>
+    <inceptionYear>2018</inceptionYear>
+    <organization>
+        <name>University of Bristol</name>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3+</name>
+            <url>http://www.gnu.org/licenses/gpl.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>sjcross</id>
+            <name>Stephen Cross</name>
+            <roles>
+                <role>lead</role>
+                <role>developer</role>
+                <role>debugger</role>
+                <role>reviewer</role>
+                <role>support</role>
+                <role>maintainer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>Stephen Cross</name>
+            <roles><role>founder</role></roles>
+            <properties><id>sjcross</id></properties>
+        </contributor>
+    </contributors>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/SJCross/MIA_MATLAB/issues</url>
+    </issueManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dependency.locations.enabled>false</dependency.locations.enabled>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <myscope>compile</myscope>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>2.9</version>
+            <type>maven-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+
+        <dependency>
             <groupId>wbif.sjx</groupId>
             <artifactId>ModularImageAnalysis</artifactId>
-            <version>0.7.17-SNAPSHOT</version>
+            <version>0.7.19-SNAPSHOT</version>
+            <scope>provided</scope>
+            <!--<groupId>com.github.SJCross</groupId>-->
+            <!--<artifactId>ModularImageAnalysis</artifactId>-->
+            <!--<version>v0.7.18</version>-->
+        </dependency>
+
+        <dependency>
+            <groupId>NA</groupId>
+            <artifactId>javabuilder</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>C:/Program Files/MATLAB/R2017a/toolbox/javabuilder/jar/javabuilder.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>NA</groupId>
+            <artifactId>ConvexHull</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/MATLAB/ConvexHull.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
