@@ -9,5 +9,8 @@
         <module name="MIA_MATLAB" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="MIA_MATLAB" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
