@@ -3,7 +3,7 @@ MATLAB Java Package Read Me
 1. Prerequisites for Deployment 
 
 . Verify the MATLAB Runtime is installed and ensure you    
-  have installed version 9.2 (R2017a). 
+  have installed version 9.0.1 (R2016a). 
 
 . If the MATLAB Runtime is not installed, do the following:
   (1) enter
@@ -15,7 +15,7 @@ MATLAB Java Package Read Me
 
   (2) run the MATLAB Runtime Installer.
 
-Or download the Windows 64-bit version of the MATLAB Runtime for R2017a 
+Or download the Windows 64-bit version of the MATLAB Runtime for R2016a 
 from the MathWorks Web site by navigating to
 
    http://www.mathworks.com/products/compiler/mcr/index.html
@@ -28,7 +28,7 @@ in the MathWorks Documentation Center.
 . Ensure you have the version 1.7 of the Java Development Kit (JDK) to integrate the 
   component. 
 
-. ConvexHull.jar must be included in your CLASSPATH.
+. MIA_MATLAB.jar must be included in your CLASSPATH.
 
 . javabuilder.jar must be included in your CLASSPATH. javabuilder.jar 
   can be found in: 
@@ -40,13 +40,13 @@ NOTE: You will need administrator rights to run MCRInstaller.
  
 2. Files to Deploy and Package
 
--ConvexHull.jar
+-MIA_MATLAB.jar
 -MCRInstaller.exe 
    - if end users are unable to download the MATLAB Runtime using the above  
      link, include it when building your component by clicking 
      the "Runtime downloaded from web" link in the Deployment Tool
 -Javadoc   
-   - javadoc for ConvexHull is in the doc directory. While  
+   - javadoc for MIA_MATLAB is in the doc directory. While  
      distributing the javadoc, this entire directory should be distributed.
 -This readme file
 
@@ -78,24 +78,24 @@ In the following directions, replace MCR_ROOT by the directory where the MATLAB 
 
 (1) Set the environment variable XAPPLRESDIR to this value:
 
-    MCR_ROOT/v92/X11/app-defaults
+    MCR_ROOT/v901/X11/app-defaults
 
 
 (2) If the environment variable LD_LIBRARY_PATH is undefined, set it to the concatenation 
    of the following strings:
 
-    MCR_ROOT/v92/runtime/glnxa64:
-    MCR_ROOT/v92/bin/glnxa64:
-    MCR_ROOT/v92/sys/os/glnxa64:
-    MCR_ROOT/v92/sys/opengl/lib/glnxa64
+    MCR_ROOT/v901/runtime/glnxa64:
+    MCR_ROOT/v901/bin/glnxa64:
+    MCR_ROOT/v901/sys/os/glnxa64:
+    MCR_ROOT/v901/sys/opengl/lib/glnxa64
 
     If it is defined, set it to the concatenation of these strings:
 
     ${LD_LIBRARY_PATH}: 
-    MCR_ROOT/v92/runtime/glnxa64:
-    MCR_ROOT/v92/bin/glnxa64:
-    MCR_ROOT/v92/sys/os/glnxa64:
-    MCR_ROOT/v92/sys/opengl/lib/glnxa64
+    MCR_ROOT/v901/runtime/glnxa64:
+    MCR_ROOT/v901/bin/glnxa64:
+    MCR_ROOT/v901/sys/os/glnxa64:
+    MCR_ROOT/v901/sys/opengl/lib/glnxa64
  
 B. Mac systems: 
 In the following directions, replace MCR_ROOT by the directory where the MATLAB Runtime 
@@ -104,16 +104,16 @@ In the following directions, replace MCR_ROOT by the directory where the MATLAB 
 If the environment variable DYLD_LIBRARY_PATH is undefined, set it to the concatenation 
    of the following strings:
 
-    MCR_ROOT/v92/runtime/maci64:
-    MCR_ROOT/v92/sys/os/maci64:
-    MCR_ROOT/v92/bin/maci64
+    MCR_ROOT/v901/runtime/maci64:
+    MCR_ROOT/v901/sys/os/maci64:
+    MCR_ROOT/v901/bin/maci64
 
 If it is defined, set it to the concatenation of these strings:
 
     ${LD_LIBRARY_PATH}: 
-    MCR_ROOT/v92/runtime/maci64:
-    MCR_ROOT/v92/sys/os/maci64:
-    MCR_ROOT/v92/bin/maci64
+    MCR_ROOT/v901/runtime/maci64:
+    MCR_ROOT/v901/sys/os/maci64:
+    MCR_ROOT/v901/bin/maci64
 
    For more detail information about setting the MATLAB Runtime paths, see Package and 
    Distribute in the MATLAB Compiler SDK documentation in the MathWorks Documentation 

@@ -90,8 +90,19 @@
 
     <repositories>
         <repository>
+            <id>imagej.public</id>
+            <url>http://maven.imagej.net/content/groups/public</url>
+        </repository>
+
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
+            <id>ome-web-prod.lifesci.dundee.ac.uk</id>
+            <name>ome-web-prod.lifesci.dundee.ac.uk-releases</name>
+            <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
         </repository>
     </repositories>
 
@@ -103,33 +114,37 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>2.9</version>
-            <type>maven-plugin</type>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-project-info-reports-plugin</artifactId>-->
+            <!--<version>2.9</version>-->
+            <!--<type>maven-plugin</type>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
             <version>3.0.4</version>
-        </dependency>
-
-        <dependency>
-            <!--<groupId>wbif.sjx</groupId>-->
-            <!--<artifactId>ModularImageAnalysis</artifactId>-->
-            <!--<version>0.7.19-SNAPSHOT</version>-->
-            <!--<scope>provided</scope>-->
-            <groupId>com.github.SJCross</groupId>
-            <artifactId>ModularImageAnalysis</artifactId>
-            <version>v0.7.19</version>
             <scope>${myscope}</scope>
         </dependency>
 
         <dependency>
             <groupId>wbif.sjx</groupId>
-            <artifactId>ConvexHull</artifactId>
+            <artifactId>ModularImageAnalysis</artifactId>
+            <version>0.9.7</version>
+            <scope>${myscope}</scope>
+            <!--<groupId>com.github.SJCross</groupId>-->
+            <!--<artifactId>ModularImageAnalysis</artifactId>-->
+            <!--<version>0.7.19</version>-->
+            <!--<scope>${myscope}</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>wbif.sjx</groupId>
+            <artifactId>MIA_MATLAB</artifactId>
             <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/MATLAB/Compiled/MIA_MATLAB.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -137,12 +152,30 @@
             <artifactId>javabuilder</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>C:/Program Files/MATLAB/R2017a/toolbox/javabuilder/jar/javabuilder.jar</systemPath>
+            <systemPath>C:/Program Files/MATLAB/R2016a/toolbox/javabuilder/jar/javabuilder.jar</systemPath>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>ConvexHull</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -157,49 +190,6 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <filters>
-                                <!--<filter>-->
-                                <!--<artifact>org.apache.poi</artifact>-->
-                                <!--<includes>-->
-                                <!--<include>**</include>-->
-                                <!--</includes>-->
-                                <!--</filter>-->
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>wbif.sjx.ModularImageAnalysis.MIA</Main-Class>
-                                        <Specification-Title>${project.artifactId}</Specification-Title>
-                                        <Specification-Version>${project.version}</Specification-Version>
-                                    </manifestEntries>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

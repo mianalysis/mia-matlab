@@ -1,20 +1,24 @@
 package wbif.sjx.MIA_MATLAB;
 
-import ConvexHull.ConvexHull;
+import MIA_MATLAB.AlphaShape;
 import com.mathworks.toolbox.javabuilder.MWClassID;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import ij.ImagePlus;
+import ij.macro.MacroExtension;
 import wbif.sjx.ModularImageAnalysis.MIA;
+import wbif.sjx.ModularImageAnalysis.Macro.MacroOperation;
 import wbif.sjx.ModularImageAnalysis.Module.Module;
 import wbif.sjx.ModularImageAnalysis.Module.ObjectProcessing.Miscellaneous.ConvertObjectsToImage;
 import wbif.sjx.ModularImageAnalysis.Module.PackageNames;
 import wbif.sjx.ModularImageAnalysis.Object.*;
+import wbif.sjx.ModularImageAnalysis.Object.Parameters.*;
 import wbif.sjx.ModularImageAnalysis.Process.ColourFactory;
 import wbif.sjx.common.MathFunc.Indexer;
 import wbif.sjx.common.Object.LUTs;
 import wbif.sjx.common.Object.Point;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -22,10 +26,18 @@ public class FitConvexHull extends Module {
     public static final String INPUT_OBJECTS = "Input objects";
     public static final String OUTPUT_OBJECTS = "Output objects";
     public static final String TEMPLATE_IMAGE = "Template image";
+    public static final String ALPHA_RADIUS_MODE = "Alpha radius mode";
+    public static final String ALPHA_RADIUS = "Alpha radius";
 
+    public interface AlphaRadiusModes {
+        String AUTOMATIC = "Automatic";
+        String MANUAL = "Manual";
+
+        String[] ALL = new String[]{AUTOMATIC,MANUAL};
+
+    }
 
     public static void main(String[] args) throws Exception {
-
         MIA.addPluginPackageName(FitConvexHull.class.getCanonicalName());
         MIA.main(new String[]{});
 
@@ -70,7 +82,7 @@ public class FitConvexHull extends Module {
 
     }
 
-    public static Obj getConvexHull(Obj inputObject, Image templateImage, String outputObjectsName, ObjCollection outputObjects) {
+    public static Obj getConvexHull(Obj inputObject, Image templateImage, String outputObjectsName, ObjCollection outputObjects, double alphaRadius) {
         double dppXY = inputObject.getDistPerPxXY();
         double dppZ = inputObject.getDistPerPxZ();
         String calibratedUnits = inputObject.getCalibratedUnits();
@@ -81,8 +93,12 @@ public class FitConvexHull extends Module {
             MWNumericArray points = convertPointsToMW(inputObject.getSurface());
 
             // Calculating the convex hull
-            ConvexHull convexHull = new ConvexHull();
-            Object[] output = convexHull.getContainedPoints(1,points);
+            Object[] output = null;
+            if (alphaRadius == -1) {
+                output = new AlphaShape().fitAlphaSurfaceAuto(1, points);
+            } else {
+                output = new AlphaShape().fitAlphaSurface(1, points, alphaRadius);
+            }
 
             // Converting the output into a series of Point<Integer> objects
             Obj convexHullObject = new Obj(outputObjectsName,outputObjects.getNextID(),dppXY,dppZ,calibratedUnits,is2D);
@@ -122,6 +138,14 @@ public class FitConvexHull extends Module {
         String outputObjectsName = parameters.getValue(OUTPUT_OBJECTS);
         String templateImageName = parameters.getValue(TEMPLATE_IMAGE);
         Image templateImage = workspace.getImage(templateImageName);
+        String alphaRadiusMode = parameters.getValue(ALPHA_RADIUS_MODE);
+        double alphaRadius = parameters.getValue(ALPHA_RADIUS);
+
+        switch (alphaRadiusMode) {
+            case AlphaRadiusModes.AUTOMATIC:
+                alphaRadius = -1;
+                break;
+        }
 
         // Creating a collection for the convex hull objects
         ObjCollection outputObjects = new ObjCollection(outputObjectsName);
@@ -134,7 +158,7 @@ public class FitConvexHull extends Module {
             // Testing the object can be fit
             if (!testFittingValidity(inputObject)) continue;
 
-            Obj convexHullObj = getConvexHull(inputObject,templateImage,outputObjectsName,outputObjects);
+            Obj convexHullObj = getConvexHull(inputObject,templateImage,outputObjectsName,outputObjects,alphaRadius);
             if (convexHullObj == null) continue;
 
             outputObjects.add(convexHullObj);
@@ -160,29 +184,45 @@ public class FitConvexHull extends Module {
 
     @Override
     protected void initialiseParameters() {
-        parameters.add(new Parameter(INPUT_OBJECTS,Parameter.INPUT_OBJECTS,null));
-        parameters.add(new Parameter(OUTPUT_OBJECTS,Parameter.OUTPUT_OBJECTS,null));
-        parameters.add(new Parameter(TEMPLATE_IMAGE,Parameter.INPUT_IMAGE,null));
+        parameters.add(new InputObjectsP(INPUT_OBJECTS,this));
+        parameters.add(new OutputObjectsP(OUTPUT_OBJECTS,this));
+        parameters.add(new InputImageP(TEMPLATE_IMAGE,this));
+        parameters.add(new ChoiceP(ALPHA_RADIUS_MODE,this,AlphaRadiusModes.AUTOMATIC,AlphaRadiusModes.ALL));
+        parameters.add(new DoubleP(ALPHA_RADIUS,this,1));
 
     }
 
     @Override
     public ParameterCollection updateAndGetParameters() {
-        return parameters;
+        ParameterCollection returnedParameters = new ParameterCollection();
+
+        returnedParameters.add(parameters.getParameter(INPUT_OBJECTS));
+        returnedParameters.add(parameters.getParameter(OUTPUT_OBJECTS));
+        returnedParameters.add(parameters.getParameter(TEMPLATE_IMAGE));
+
+        returnedParameters.add(parameters.getParameter(ALPHA_RADIUS_MODE));
+        switch ((String) parameters.getValue(ALPHA_RADIUS_MODE)) {
+            case AlphaRadiusModes.MANUAL:
+                returnedParameters.add(parameters.getParameter(ALPHA_RADIUS));
+                break;
+        }
+
+        return returnedParameters;
+
     }
 
     @Override
-    public MeasurementReferenceCollection updateAndGetImageMeasurementReferences() {
+    public MeasurementRefCollection updateAndGetImageMeasurementRefs() {
         return null;
     }
 
     @Override
-    public MeasurementReferenceCollection updateAndGetObjectMeasurementReferences() {
+    public MeasurementRefCollection updateAndGetObjectMeasurementRefs() {
         return null;
     }
 
     @Override
-    public MetadataReferenceCollection updateAndGetMetadataReferences() {
+    public MetadataRefCollection updateAndGetMetadataReferences() {
         return null;
     }
 
