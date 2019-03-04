@@ -4,6 +4,7 @@ import MIA_MATLAB.AlphaShape;
 import com.mathworks.toolbox.javabuilder.MWClassID;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
+import com.mathworks.toolbox.javabuilder.MWStructArray;
 import ij.ImagePlus;
 import ij.macro.MacroExtension;
 import wbif.sjx.ModularImageAnalysis.MIA;
@@ -100,10 +101,30 @@ public class FitConvexHull extends Module {
                 output = new AlphaShape().fitAlphaSurface(1, points, alphaRadius);
             }
 
+            MWStructArray res = (MWStructArray) output[0];
+
             // Converting the output into a series of Point<Integer> objects
             Obj convexHullObject = new Obj(outputObjectsName,outputObjects.getNextID(),dppXY,dppZ,calibratedUnits,is2D);
-            TreeSet<Point<Integer>> convexHullPoints = convertMWToPoints((MWNumericArray) output[0]);
+            int idx = res.fieldIndex("Points");
+            System.out.println(res.get(1).getClass().getCanonicalName());
+            System.out.println(((double[][]) res.get(1)).length);
+
+            System.out.println(res.get(2).getClass().getCanonicalName());
+            System.out.println(((double[][]) res.get(2))[0][0]);
+            System.out.println(res.get(3).getClass().getCanonicalName());
+            System.out.println(((double[][]) res.get(3))[0][0]);
+            System.out.println(res.get(4).getClass().getCanonicalName());
+            System.out.println(((double[][]) res.get(4))[0][0]);
+            System.out.println(res.get(5).getClass().getCanonicalName());
+            System.out.println(((double[][]) res.get(5))[0][0]);
+            System.out.println(res.get(0).getClass().getCanonicalName());
+            System.out.println(((double[][]) res.get(0))[0][0]);
+            TreeSet<Point<Integer>> convexHullPoints = convertMWToPoints((MWNumericArray) res.get(0));
             convexHullObject.setPoints(convexHullPoints);
+
+            System.out.println(((double[][]) res.get(2))[0][0]);
+            System.out.println(((double[][]) res.get(3))[0][0]);
+
 
             return convexHullObject;
 
@@ -170,7 +191,6 @@ public class FitConvexHull extends Module {
 
         if (showOutput) {
             HashMap<Integer,Float> hues = ColourFactory.getRandomHues(outputObjects);
-            String mode = ConvertObjectsToImage.ColourModes.RANDOM_COLOUR;
             ImagePlus dispIpl = outputObjects.convertObjectsToImage("Objects",null,hues,8,false).getImagePlus();
             dispIpl.setLut(LUTs.Random(true));
             dispIpl.setPosition(1,1,1);
