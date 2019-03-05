@@ -186,7 +186,7 @@
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <mainClass>wbif.sjx.MIA_MATLAB.FitConvexHull</mainClass>
+                            <mainClass>wbif.sjx.MIA_MATLAB.FitAlphaSurface</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

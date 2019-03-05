@@ -1,12 +1,12 @@
 /*
  * MATLAB Compiler: 6.2 (R2016a)
- * Date: Fri Mar 01 18:54:21 2019
+ * Date: Tue Mar 05 08:28:37 2019
  * Arguments: "-B" "macro_default" "-W" "java:MIA_MATLAB,AlphaShape" "-T" "link:lib" "-d" 
  * "C:\\Users\\steph\\Documents\\Java 
  * Projects\\MIA_MATLAB\\MATLAB\\MIA_MATLAB\\for_testing" 
  * "class{AlphaShape:C:\\Users\\steph\\Documents\\Java 
- * Projects\\MIA_MATLAB\\MATLAB\\fitAlphaSurface.m,C:\\Users\\steph\\Documents\\Java 
- * Projects\\MIA_MATLAB\\MATLAB\\fitAlphaSurfaceAuto.m}" 
+ * Projects\\MIA_MATLAB\\MATLAB\\AlphaShape\\fitAlphaSurface.m,C:\\Users\\steph\\Documents\\Java 
+ * Projects\\MIA_MATLAB\\MATLAB\\AlphaShape\\fitAlphaSurfaceAuto.m}" 
  */
 
 package MIA_MATLAB;
@@ -20,8 +20,8 @@ import java.rmi.RemoteException;
  * The <code>AlphaShapeRemote</code> class provides a Java RMI-compliant interface to the 
  * M-functions from the files:
  * <pre>
- *  C:\\Users\\steph\\Documents\\Java Projects\\MIA_MATLAB\\MATLAB\\fitAlphaSurface.m
- *  C:\\Users\\steph\\Documents\\Java Projects\\MIA_MATLAB\\MATLAB\\fitAlphaSurfaceAuto.m
+ *  C:\\Users\\steph\\Documents\\Java Projects\\MIA_MATLAB\\MATLAB\\AlphaShape\\fitAlphaSurface.m
+ *  C:\\Users\\steph\\Documents\\Java Projects\\MIA_MATLAB\\MATLAB\\AlphaShape\\fitAlphaSurfaceAuto.m
  * </pre>
  * The {@link #dispose} method <b>must</b> be called on a <code>AlphaShapeRemote</code> 
  * instance when it is no longer needed to ensure that native resources allocated by this 
@@ -37,7 +37,7 @@ public interface AlphaShapeRemote extends Poolable
 {
     /**
      * Provides the standard interface for calling the <code>fitAlphaSurface</code> 
-     * M-function with 2 input arguments.  
+     * M-function with 3 input arguments.  
      *
      * Input arguments to standard interface methods may be passed as sub-classes of 
      * <code>com.mathworks.toolbox.javabuilder.MWArray</code>, or as arrays of any 
@@ -66,7 +66,7 @@ public interface AlphaShapeRemote extends Poolable
     public Object[] fitAlphaSurface(int nargout, Object... rhs) throws RemoteException;
     /**
      * Provides the standard interface for calling the <code>fitAlphaSurfaceAuto</code> 
-     * M-function with 1 input argument.  
+     * M-function with 2 input arguments.  
      *
      * Input arguments to standard interface methods may be passed as sub-classes of 
      * <code>com.mathworks.toolbox.javabuilder.MWArray</code>, or as arrays of any 
