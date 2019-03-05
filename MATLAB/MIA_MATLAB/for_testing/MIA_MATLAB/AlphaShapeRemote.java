@@ -1,6 +1,6 @@
 /*
  * MATLAB Compiler: 6.2 (R2016a)
- * Date: Tue Mar 05 08:28:37 2019
+ * Date: Tue Mar 05 18:01:31 2019
  * Arguments: "-B" "macro_default" "-W" "java:MIA_MATLAB,AlphaShape" "-T" "link:lib" "-d" 
  * "C:\\Users\\steph\\Documents\\Java 
  * Projects\\MIA_MATLAB\\MATLAB\\MIA_MATLAB\\for_testing" 
@@ -37,7 +37,7 @@ public interface AlphaShapeRemote extends Poolable
 {
     /**
      * Provides the standard interface for calling the <code>fitAlphaSurface</code> 
-     * M-function with 3 input arguments.  
+     * M-function with 4 input arguments.  
      *
      * Input arguments to standard interface methods may be passed as sub-classes of 
      * <code>com.mathworks.toolbox.javabuilder.MWArray</code>, or as arrays of any 
@@ -66,7 +66,7 @@ public interface AlphaShapeRemote extends Poolable
     public Object[] fitAlphaSurface(int nargout, Object... rhs) throws RemoteException;
     /**
      * Provides the standard interface for calling the <code>fitAlphaSurfaceAuto</code> 
-     * M-function with 2 input arguments.  
+     * M-function with 3 input arguments.  
      *
      * Input arguments to standard interface methods may be passed as sub-classes of 
      * <code>com.mathworks.toolbox.javabuilder.MWArray</code>, or as arrays of any 

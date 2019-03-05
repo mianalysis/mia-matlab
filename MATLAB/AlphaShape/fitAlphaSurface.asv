@@ -1,13 +1,21 @@
-function [in_pts, res] = fitAlphaSurface(pts, radius)
+function [in_pts, res] = fitAlphaSurface(pts, radius, xyzConversion, verbose)
 
 % pts must be double precision
 pts = double(pts);
 
 % Fitting alpha shape
+if verbose
+    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Fitting alpha shape');
+end
+
 if isnan(radius)
-    shp = alphaShape(pts(:,1),pts(:,2),pts(:,3));
+    shp = alphaShape(pts(:,1),pts(:,2),pts(:,3)*xyzConversion);
 else
-    shp = alphaShape(pts(:,1),pts(:,2),pts(:,3),radius);
+    shp = alphaShape(pts(:,1),pts(:,2),pts(:,3)*xyzConversion,radius);
+end
+
+if verbose
+    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Fitting complete');
 end
 
 % Getting coordinate limits
@@ -21,6 +29,10 @@ maxZ = max(pts(:,3));
 % Creating a regularly-spaced array of points
 % [x,y,z] = meshgrid(minX:maxX,minY:maxY,minZ:maxZ);
 
+if verbose
+    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Estimating object size');
+end
+
 count = 1;
 for x=minX:maxX
     for y=minY:maxY
@@ -34,12 +46,15 @@ for x=minX:maxX
     end
 end
 
+if verbose
+    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Extracting internal points');
+end
 in_pts = zeros(count,3);
 count = 1;
 for x=minX:maxX
     for y=minY:maxY
         for z=minZ:maxZ
-            inside = shp.inShape(x,y,z);
+            inside = shp.inShape(x,y,z*xyzConversion);
             
             if inside
                 in_pts(count,:) = [x,y,z];
@@ -47,6 +62,10 @@ for x=minX:maxX
             end
         end
     end
+end
+
+if verbose
+    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Adding measurements');
 end
 
 % Adding results
@@ -61,6 +80,10 @@ else
     res.perimeter = NaN;
     res.volume = shp.volume;
     res.surfaceArea = shp.surfaceArea;
+end
+
+if verbose
+    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Fitting complete');
 end
 
 end

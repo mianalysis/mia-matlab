@@ -1,4 +1,4 @@
-function [in_pts, res] = fitAlphaSurface(pts, radius, verbose)
+function [in_pts, res] = fitAlphaSurface(pts, radius, xyzConversion, verbose)
 
 % pts must be double precision
 pts = double(pts);
@@ -9,10 +9,13 @@ if verbose
 end
 
 if isnan(radius)
-    shp = alphaShape(pts(:,1),pts(:,2),pts(:,3));
+    shp = alphaShape(pts(:,1),pts(:,2),pts(:,3)*xyzConversion);
 else
-    shp = alphaShape(pts(:,1),pts(:,2),pts(:,3),radius);
+    shp = alphaShape(pts(:,1),pts(:,2),pts(:,3)*xyzConversion,radius);
 end
+
+% Getting alpha value
+res.alpha = shp.Alpha;
 
 if verbose
     javaMethod('println',java.lang.System.out,'[Fit alpha shape] Fitting complete');
@@ -26,8 +29,18 @@ maxY = max(pts(:,2));
 minZ = min(pts(:,3));
 maxZ = max(pts(:,3));
 
-% Creating a regularly-spaced array of points
-% [x,y,z] = meshgrid(minX:maxX,minY:maxY,minZ:maxZ);
+% Testing if the alpha shape was formed correctly
+if minZ == maxZ
+    if shp.area == 0
+        in_pts = [];
+        return;
+    end
+else
+    if shp.volume == 0
+        in_pts = [];
+        return;
+    end
+end
 
 if verbose
     javaMethod('println',java.lang.System.out,'[Fit alpha shape] Estimating object size');
@@ -54,7 +67,7 @@ count = 1;
 for x=minX:maxX
     for y=minY:maxY
         for z=minZ:maxZ
-            inside = shp.inShape(x,y,z);
+            inside = shp.inShape(x,y,z*xyzConversion);
             
             if inside
                 in_pts(count,:) = [x,y,z];
@@ -69,7 +82,6 @@ if verbose
 end
 
 % Adding results
-res.alpha = shp.Alpha;
 if minZ == maxZ
     res.area = shp.area;
     res.perimeter = shp.perimeter;

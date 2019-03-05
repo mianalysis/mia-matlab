@@ -16,6 +16,7 @@ import wbif.sjx.common.MathFunc.Indexer;
 import wbif.sjx.common.Object.LUTs;
 import wbif.sjx.common.Object.Point;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -46,6 +47,7 @@ public class FitAlphaSurface extends Module {
     }
 
     public interface Measurements {
+        String ALPHA_RADIUS = "ALPHA_SHAPE // ALPHA_RADIUS (PX)";
         String AREA_PX = "ALPHA_SHAPE // AREA (PX^2)";
         String AREA_CAL = "ALPHA_SHAPE // AREA (${CAL}^2)";
         String PERIMETER_PX = "ALPHA_SHAPE // PERIMETER (PX)";
@@ -64,31 +66,30 @@ public class FitAlphaSurface extends Module {
 
     }
 
-    static MWNumericArray coordsToMW(TreeSet<Point<Integer>> points, double xyzConversion) {
+    static MWNumericArray coordsToMW(TreeSet<Point<Integer>> points) {
         double[][] pointArray = new double[points.size()][3];
 
         int i=0;
         for (Point<Integer> point:points) {
             pointArray[i][0] = point.getX();
             pointArray[i][1] = point.getY();
-            pointArray[i++][2] = point.getZ()*xyzConversion;
+            pointArray[i++][2] = point.getZ();
         }
 
         return new MWNumericArray(pointArray,MWClassID.DOUBLE);
 
     }
 
-    static TreeSet<Point<Integer>> convertMWToPoints(MWNumericArray array, double xyzConversion) {
+    static TreeSet<Point<Integer>> convertMWToPoints(MWNumericArray array) {
         TreeSet<Point<Integer>> points = new TreeSet<>();
 
         int nPoints = array.getDimensions()[0];
         Indexer indexer = new Indexer(nPoints,3);
         for (int i=0;i<nPoints;i++) {
-            System.out.println(i+"_"+nPoints);
             int[] data = array.getIntData();
             int x = data[indexer.getIndex(new int[]{i,0})];
             int y = data[indexer.getIndex(new int[]{i,1})];
-            int z = (int) Math.round(((double) data[indexer.getIndex(new int[]{i,2})]) / ((double) xyzConversion));
+            int z = data[indexer.getIndex(new int[]{i,2})];
 
             // We can't have duplicate coordinates in the TreeSet, so this should automatically down-sample Z
             points.add(new Point<>(x,y,z));
@@ -107,13 +108,13 @@ public class FitAlphaSurface extends Module {
         try {
             // Getting points in MathWorks format
             TreeSet<Point<Integer>> surfacePoints = inputObject.getSurface();
-            MWNumericArray points = coordsToMW(surfacePoints,xyzConversion);
+            MWNumericArray points = coordsToMW(surfacePoints);
 
             // Calculating the alpha shape
             if (alphaRadius == -1) {
-                return new AlphaShape().fitAlphaSurfaceAuto(2, points, isVerbose());
+                return new AlphaShape().fitAlphaSurfaceAuto(2, points, xyzConversion, false);
             } else {
-                return new AlphaShape().fitAlphaSurface(2, points, alphaRadius, isVerbose());
+                return new AlphaShape().fitAlphaSurface(2, points, alphaRadius, xyzConversion, false);
             }
         } catch (MWException e) {
             e.printStackTrace();
@@ -130,7 +131,7 @@ public class FitAlphaSurface extends Module {
 
         // Converting the output into a series of Point<Integer> objects
         Obj alphaShapeObject = new Obj(outputObjects.getName(),outputObjects.getNextID(),dppXY,dppZ,calibratedUnits,is2D);
-        TreeSet<Point<Integer>> alphaShapePoints = convertMWToPoints(points,xyzConversion);
+        TreeSet<Point<Integer>> alphaShapePoints = convertMWToPoints(points);
         alphaShapeObject.setPoints(alphaShapePoints);
 
         // Removing any pixels outside the image area
@@ -141,6 +142,13 @@ public class FitAlphaSurface extends Module {
         alphaShapeObject.addParent(inputObject);
 
         return alphaShapeObject;
+
+    }
+
+    static void addCommonMeasurements(Obj inputObject, MWStructArray results) {
+        int idx = results.fieldIndex("alpha");
+        double alpha = ((double[][]) results.get(idx+1))[0][0];
+        inputObject.addMeasurement(new Measurement(Measurements.ALPHA_RADIUS,alpha));
 
     }
 
@@ -239,19 +247,18 @@ public class FitAlphaSurface extends Module {
 
             // Getting results of alpha shape fitting
             Object[] output = getAlphaSurface(inputObject,alphaRadius);
-            if (output == null) continue;
-
-            System.out.println("1");
+            if (output==null || output[0] == null) continue;
 
             MWStructArray results = (MWStructArray) output[1];
-            int idx = results.fieldIndex("volume");
-            double volume = ((double[][]) results.get(idx+1))[0][0];
-            System.out.println(inputObject.getNVoxels()+"_"+volume);
+
+            // If the fitting fails, only the alpha value is returned
+            if (results.fieldNames().length == 1) continue;
 
             // Creating object
             Obj alphaShapeObject = createAlphaSurfaceObject(outputObjects,inputObject,(MWNumericArray) output[0],templateImage);
-            System.out.println("2");
+
             // Assigning measurements
+            addCommonMeasurements(inputObject,(MWStructArray) output[1]);
             switch (measurementMode) {
                 case MeasurementModes.TWOD:
                     add2DMeasurements(inputObject,(MWStructArray) output[1]);
@@ -260,7 +267,6 @@ public class FitAlphaSurface extends Module {
                     add3DMeasurements(inputObject,(MWStructArray) output[1]);
                     break;
             }
-            System.out.println("3");
             outputObjects.add(alphaShapeObject);
 
         }
@@ -327,9 +333,14 @@ public class FitAlphaSurface extends Module {
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
         String measurementMode = parameters.getValue(MEASUREMENT_MODE);
 
+        MeasurementRef measurementRef = new MeasurementRef(Measurements.ALPHA_RADIUS);
+        measurementRef.setImageObjName(inputObjectsName);
+        measurementRef.setCalculated(true);
+        objectMeasurementRefs.add(measurementRef);
+
         switch (measurementMode) {
             case MeasurementModes.TWOD:
-                MeasurementRef measurementRef = new MeasurementRef(Measurements.AREA_PX);
+                measurementRef = new MeasurementRef(Measurements.AREA_PX);
                 measurementRef.setImageObjName(inputObjectsName);
                 measurementRef.setCalculated(true);
                 objectMeasurementRefs.add(measurementRef);

@@ -1,6 +1,6 @@
 /*
  * MATLAB Compiler: 6.2 (R2016a)
- * Date: Tue Mar 05 08:28:37 2019
+ * Date: Tue Mar 05 18:01:31 2019
  * Arguments: "-B" "macro_default" "-W" "java:MIA_MATLAB,AlphaShape" "-T" "link:lib" "-d" 
  * "C:\\Users\\steph\\Documents\\Java 
  * Projects\\MIA_MATLAB\\MATLAB\\MIA_MATLAB\\for_testing" 
@@ -22,7 +22,7 @@ public class MIA_MATLABMCRFactory
    
     
     /** Component's uuid */
-    private static final String sComponentId = "MIA_MATLAB_0843322F845BD884E3A7517F340CD0C7";
+    private static final String sComponentId = "MIA_MATLAB_7B9DD9FEA7849C68A111A8A727379341";
     
     /** Component name */
     private static final String sComponentName = "MIA_MATLAB";
