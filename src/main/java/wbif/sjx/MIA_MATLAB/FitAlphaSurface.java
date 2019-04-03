@@ -1,17 +1,17 @@
 package wbif.sjx.MIA_MATLAB;
 
-import MIA_MATLAB.AlphaShape;
+import MIA_MATLAB_Core.AlphaShape;
 import com.mathworks.toolbox.javabuilder.MWClassID;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 import ij.ImagePlus;
-import wbif.sjx.ModularImageAnalysis.MIA;
-import wbif.sjx.ModularImageAnalysis.Module.Module;
-import wbif.sjx.ModularImageAnalysis.Module.PackageNames;
-import wbif.sjx.ModularImageAnalysis.Object.*;
-import wbif.sjx.ModularImageAnalysis.Object.Parameters.*;
-import wbif.sjx.ModularImageAnalysis.Process.ColourFactory;
+import wbif.sjx.MIA.MIA;
+import wbif.sjx.MIA.Module.Module;
+import wbif.sjx.MIA.Module.PackageNames;
+import wbif.sjx.MIA.Object.*;
+import wbif.sjx.MIA.Object.Parameters.*;
+import wbif.sjx.MIA.Process.ColourFactory;
 import wbif.sjx.common.MathFunc.Indexer;
 import wbif.sjx.common.Object.LUTs;
 import wbif.sjx.common.Object.Point;
@@ -85,8 +85,8 @@ public class FitAlphaSurface extends Module {
 
         int nPoints = array.getDimensions()[0];
         Indexer indexer = new Indexer(nPoints,3);
+        int[] data = array.getIntData();
         for (int i=0;i<nPoints;i++) {
-            int[] data = array.getIntData();
             int x = data[indexer.getIndex(new int[]{i,0})];
             int y = data[indexer.getIndex(new int[]{i,1})];
             int z = data[indexer.getIndex(new int[]{i,2})];
@@ -131,6 +131,7 @@ public class FitAlphaSurface extends Module {
 
         // Converting the output into a series of Point<Integer> objects
         Obj alphaShapeObject = new Obj(outputObjects.getName(),outputObjects.getNextID(),dppXY,dppZ,calibratedUnits,is2D);
+        alphaShapeObject.setT(inputObject.getT());
         TreeSet<Point<Integer>> alphaShapePoints = convertMWToPoints(points);
         alphaShapeObject.setPoints(alphaShapePoints);
 
@@ -215,7 +216,7 @@ public class FitAlphaSurface extends Module {
     }
 
     @Override
-    protected boolean run(Workspace workspace) {
+    protected boolean process(Workspace workspace) {
         // Getting input objects
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
         ObjCollection inputObjects = workspace.getObjectSet(inputObjectsName);
@@ -245,8 +246,13 @@ public class FitAlphaSurface extends Module {
             // Testing the object can be fit
             if (!testFittingValidity(inputObject)) continue;
 
+            // Getting surface
+            TreeSet<Point<Integer>> surfacePoints = inputObject.getSurface();
+            Obj surface = new Obj("Surface",inputObject.getID(),inputObject.getDistPerPxXY(),inputObject.getDistPerPxZ(),inputObject.getCalibratedUnits(),inputObject.is2D());
+            surface.setPoints(surfacePoints);
+
             // Getting results of alpha shape fitting
-            Object[] output = getAlphaSurface(inputObject,alphaRadius);
+            Object[] output = getAlphaSurface(surface,alphaRadius);
             if (output==null || output[0] == null) continue;
 
             MWStructArray results = (MWStructArray) output[1];
@@ -255,6 +261,7 @@ public class FitAlphaSurface extends Module {
             if (results.fieldNames().length == 1) continue;
 
             // Creating object
+            writeMessage("Creating alpha surface object");
             Obj alphaShapeObject = createAlphaSurfaceObject(outputObjects,inputObject,(MWNumericArray) output[0],templateImage);
 
             // Assigning measurements
@@ -394,11 +401,15 @@ public class FitAlphaSurface extends Module {
     }
 
     @Override
-    public void addRelationships(RelationshipCollection relationshipCollection) {
+    public RelationshipCollection updateAndGetRelationships() {
+        RelationshipCollection relationships = new RelationshipCollection();
+
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
         String alphaShapeObjectsName = parameters.getValue(OUTPUT_OBJECTS);
 
-        relationshipCollection.addRelationship(inputObjectsName,alphaShapeObjectsName);
+        relationships.addRelationship(inputObjectsName,alphaShapeObjectsName);
+
+        return relationships;
 
     }
 }

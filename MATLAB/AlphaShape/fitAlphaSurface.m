@@ -1,7 +1,7 @@
 function [in_pts, res] = fitAlphaSurface(pts, radius, xyzConversion, verbose)
 
-% pts must be double precision
-pts = double(pts);
+% Converting pts to double precision and one-indexing
+pts = double(pts)+1;
 
 % Fitting alpha shape
 if verbose
@@ -43,39 +43,20 @@ else
 end
 
 if verbose
-    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Estimating object size');
-end
-
-count = 1;
-for x=minX:maxX
-    for y=minY:maxY
-        for z=minZ:maxZ
-            inside = shp.inShape(x,y,z);
-            
-            if inside
-                count = count + 1;
-            end
-        end
-    end
-end
-
-if verbose
     javaMethod('println',java.lang.System.out,'[Fit alpha shape] Extracting internal points');
 end
-in_pts = zeros(count,3);
-count = 1;
-for x=minX:maxX
-    for y=minY:maxY
-        for z=minZ:maxZ
-            inside = shp.inShape(x,y,z*xyzConversion);
-            
-            if inside
-                in_pts(count,:) = [x,y,z];
-                count = count + 1;
-            end
-        end
-    end
-end
+
+% Creating an array to hold logical values of which pixels are inside the
+% alpha shape
+[xx,yy,zz] = meshgrid(minX:maxX,minY:maxY,minZ:maxZ);
+
+% Testing for pixels inside the alpha shape
+inside = shp.inShape(xx,yy,zz*xyzConversion);            
+[in_pts(:,2),in_pts(:,1),in_pts(:,3)] = ind2sub(size(inside),find(inside));
+
+in_pts(:,1) = in_pts(:,1) + minX - 2;
+in_pts(:,2) = in_pts(:,2) + minY - 2;
+in_pts(:,3) = in_pts(:,3) + minZ - 2;
 
 if verbose
     javaMethod('println',java.lang.System.out,'[Fit alpha shape] Adding measurements');

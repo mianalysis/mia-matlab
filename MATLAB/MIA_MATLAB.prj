@@ -1,6 +1,6 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="3006579793" file="C:\Users\steph\Documents\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB.prj" location="C:\Users\steph\Documents\Java Projects\MIA_MATLAB\MATLAB" name="MIA_MATLAB" preferred-package-location="C:\Users\steph\Documents\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
-    <param.appname>MIA_MATLAB</param.appname>
+  <configuration build-checksum="3806371039" file="F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB.prj" location="F:\JavaMATLABProjects\MIA_MATLAB\MATLAB" name="MIA_MATLAB" preferred-package-location="F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
+    <param.appname>MIA_MATLAB_Core</param.appname>
     <param.icon />
     <param.icons />
     <param.version>1.0</param.version>
@@ -11,7 +11,7 @@
     <param.description />
     <param.screenshot />
     <param.guid />
-    <param.installpath.string>\MIA_MATLAB\</param.installpath.string>
+    <param.installpath.string>\MIA_MATLAB_Core\</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
     <param.logo />
     <param.install.notes />
@@ -22,7 +22,6 @@
     <param.logdir>${PROJECT_ROOT}\MIA_MATLAB</param.logdir>
     <param.enable.clean.build>false</param.enable.clean.build>
     <param.user.defined.mcr.options />
-    <param.embed.ctf>true</param.embed.ctf>
     <param.target.type>subtarget.java.package</param.target.type>
     <param.support.packages />
     <param.namespace />
@@ -37,7 +36,6 @@
     <param.create.log>false</param.create.log>
     <param.log.file />
     <param.user.only.registration>false</param.user.only.registration>
-    <param.net.framework>option.net.framework.default</param.net.framework>
     <param.assembly.type>false</param.assembly.type>
     <param.encryption.key.file />
     <param.net.enable.remoting>false</param.net.enable.remoting>
@@ -47,8 +45,9 @@
     <param.net.tsa.namespace />
     <param.net.tsa.superclass>AlphaShape</param.net.tsa.superclass>
     <param.net.tsa.metadata />
-    <param.net.tsa.metadata.assembly>C:\Users\steph\Documents\MATLAB</param.net.tsa.metadata.assembly>
+    <param.net.tsa.metadata.assembly>F:\JavaMATLABProjects\MIA_MATLAB\MATLAB</param.net.tsa.metadata.assembly>
     <param.net.saved.interface />
+    <param.cpp.api>option.cpp.all</param.cpp.api>
     <unset>
       <param.icon />
       <param.icons />
@@ -63,6 +62,7 @@
       <param.installpath.string />
       <param.installpath.combo />
       <param.logo />
+      <param.install.notes />
       <param.target.install.notes />
       <param.intermediate />
       <param.files.only />
@@ -70,7 +70,6 @@
       <param.logdir />
       <param.enable.clean.build />
       <param.user.defined.mcr.options />
-      <param.embed.ctf />
       <param.support.packages />
       <param.namespace />
       <param.classorg />
@@ -84,7 +83,6 @@
       <param.create.log />
       <param.log.file />
       <param.user.only.registration />
-      <param.net.framework />
       <param.assembly.type />
       <param.encryption.key.file />
       <param.net.enable.remoting />
@@ -96,6 +94,7 @@
       <param.net.tsa.metadata />
       <param.net.tsa.metadata.assembly />
       <param.net.saved.interface />
+      <param.cpp.api />
     </unset>
     <fileset.exports>
       <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface.m</file>
@@ -112,29 +111,44 @@
     <fileset.resources />
     <fileset.depfun />
     <fileset.package />
+    <fileset.examples />
+    <fileset.documentation />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="readme.txt" optional="true">C:\Users\steph\Documents\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\readme.txt</file>
-      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="MIA_MATLAB.jar" optional="false">C:\Users\steph\Documents\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\MIA_MATLAB.jar</file>
-      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="doc" optional="false">C:\Users\steph\Documents\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\doc</file>
+      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="doc" optional="false">F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\doc</file>
+      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="readme.txt" optional="true">F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="MIA_MATLAB_Core.jar" optional="false">F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\MIA_MATLAB_Core.jar</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>C:\Program Files\MATLAB\R2016a</root>
+      <root>C:\Program Files\MATLAB\R2018b</root>
       <toolboxes>
-        <toolbox name="fixedpoint" />
         <toolbox name="matlabcoder" />
-        <toolbox name="matlabhdlcoder" />
         <toolbox name="embeddedcoder" />
+        <toolbox name="gpucoder" />
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="polyspacebugfinder" />
+        <toolbox name="neuralnetwork" />
       </toolboxes>
-      <toolbox>
-        <fixedpoint>
-          <enabled>true</enabled>
-        </fixedpoint>
-      </toolbox>
       <toolbox>
         <matlabcoder>
           <enabled>true</enabled>
         </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <gpucoder>
+          <enabled>true</enabled>
+        </gpucoder>
+      </toolbox>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
       </toolbox>
       <toolbox>
         <matlabhdlcoder>
@@ -142,9 +156,14 @@
         </matlabhdlcoder>
       </toolbox>
       <toolbox>
-        <embeddedcoder>
+        <polyspacebugfinder>
           <enabled>true</enabled>
-        </embeddedcoder>
+        </polyspacebugfinder>
+      </toolbox>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
       </toolbox>
     </matlab>
     <platform>
@@ -156,7 +175,7 @@
       <vista>false</vista>
       <linux>false</linux>
       <solaris>false</solaris>
-      <osver>6.2</osver>
+      <osver>10.0</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>win64</arch>

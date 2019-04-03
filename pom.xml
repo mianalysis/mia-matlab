@@ -5,15 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!--<parent>-->
-        <!--<groupId>org.scijava</groupId>-->
-        <!--<artifactId>pom-scijava</artifactId>-->
-        <!--<version>24.0.0</version>-->
-        <!--<relativePath />-->
+    <!--<groupId>org.scijava</groupId>-->
+    <!--<artifactId>pom-scijava</artifactId>-->
+    <!--<version>24.0.0</version>-->
+    <!--<relativePath />-->
     <!--</parent>-->
 
     <groupId>wbif.sjx</groupId>
     <artifactId>MIA_MATLAB</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>MIA_MATLAB</name>
     <url>https://github.com/SJCross/MIA_MATLAB</url>
@@ -65,6 +65,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <myscope>compile</myscope>
+        <genClass>system</genClass>
         <license.licenseName>GNU General Public License v3+</license.licenseName>
         <license.copyrightOwners>Stephen Cross</license.copyrightOwners>
     </properties>
@@ -104,6 +105,12 @@
             <name>ome-web-prod.lifesci.dundee.ac.uk-releases</name>
             <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
         </repository>
+
+        <repository>
+            <id>in-project</id>
+            <name>In Project Repo</name>
+            <url>file://${project.basedir}/MATLAB/Compiled</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -115,11 +122,11 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-project-info-reports-plugin</artifactId>-->
-            <!--<version>2.9</version>-->
-            <!--<type>maven-plugin</type>-->
-            <!--<scope>provided</scope>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-project-info-reports-plugin</artifactId>-->
+        <!--<version>2.9</version>-->
+        <!--<type>maven-plugin</type>-->
+        <!--<scope>provided</scope>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -131,7 +138,7 @@
         <dependency>
             <groupId>wbif.sjx</groupId>
             <artifactId>ModularImageAnalysis</artifactId>
-            <version>0.9.7</version>
+            <version>0.9.19</version>
             <scope>${myscope}</scope>
             <!--<groupId>com.github.SJCross</groupId>-->
             <!--<artifactId>ModularImageAnalysis</artifactId>-->
@@ -141,10 +148,9 @@
 
         <dependency>
             <groupId>wbif.sjx</groupId>
-            <artifactId>MIA_MATLAB</artifactId>
+            <artifactId>MIA_MATLAB_Core</artifactId>
             <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/MATLAB/Compiled/MIA_MATLAB.jar</systemPath>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -152,7 +158,7 @@
             <artifactId>javabuilder</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>C:/Program Files/MATLAB/R2016a/toolbox/javabuilder/jar/javabuilder.jar</systemPath>
+            <systemPath>C:/Program Files/MATLAB/R2018b/toolbox/javabuilder/jar/javabuilder.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -160,36 +166,49 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
+                <artifactId>maven-install-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>unpack</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
+                        <id>install-external</id>
+                        <phase>clean</phase>
                         <configuration>
-                            <includeArtifactIds>ConvexHull</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <file>${project.basedir}/MATLAB/Compiled/MIA_MATLAB_Core_v1.0.0.jar</file>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>wbif.sjx</groupId>
+                            <artifactId>MIA_MATLAB_Core</artifactId>
+                            <version>1.0.0</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
                         </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <finalName>MIA_MATLAB-${project.version}</finalName>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <mainClass>wbif.sjx.MIA_MATLAB.FitAlphaSurface</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <archive>
+                                <manifest>
+                                    <mainClass>wbif.sjx.MIA_MATLAB.FitAlphaSurface</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

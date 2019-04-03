@@ -1,121 +1,69 @@
-MATLAB Java Package Read Me
+MIA_MATLAB_Core MATLAB Java Package
 
 1. Prerequisites for Deployment 
 
-. Verify the MATLAB Runtime is installed and ensure you    
-  have installed version 9.0.1 (R2016a). 
-
-. If the MATLAB Runtime is not installed, do the following:
-  (1) enter
+Verify that version 9.5 (R2018b) of the MATLAB Runtime is installed.   
+If not, you can run the MATLAB Runtime installer.
+To find its location, enter
   
-      >>mcrinstaller
+    >>mcrinstaller
       
-      at MATLAB prompt. The MCRINSTALLER command displays the 
-      location of the MATLAB Runtime installer.
+at the MATLAB prompt.
+NOTE: You will need administrator rights to run the MATLAB Runtime installer. 
 
-  (2) run the MATLAB Runtime Installer.
+Alternatively, download and install the Windows version of the MATLAB Runtime for R2018b 
+from the following link on the MathWorks website:
 
-Or download the Windows 64-bit version of the MATLAB Runtime for R2016a 
-from the MathWorks Web site by navigating to
-
-   http://www.mathworks.com/products/compiler/mcr/index.html
+    http://www.mathworks.com/products/compiler/mcr/index.html
    
- 
 For more information about the MATLAB Runtime and the MATLAB Runtime installer, see 
-Package and Distribute in the MATLAB Compiler SDK documentation  
-in the MathWorks Documentation Center. 
-
-. Ensure you have the version 1.7 of the Java Development Kit (JDK) to integrate the 
-  component. 
-
-. MIA_MATLAB.jar must be included in your CLASSPATH.
-
-. javabuilder.jar must be included in your CLASSPATH. javabuilder.jar 
-  can be found in: 
-  
-  <mcr_root>*\toolbox\javabuilder\jar\win64\javabuilder.jar
-  
-
-NOTE: You will need administrator rights to run MCRInstaller. 
+"Distribute Applications" in the MATLAB Compiler SDK documentation  
+in the MathWorks Documentation Center.
  
+- Ensure that you have version 1.7 of the Java Development Kit (JDK). 
+
+- MIA_MATLAB_Core.jar must be included in your CLASSPATH.
+
+- javabuilder.jar must be included in your CLASSPATH. javabuilder.jar 
+  can be found at: 
+  
+  <mcr_root>\toolbox\javabuilder\jar\win64\javabuilder.jar
+
+  where <mcr_root> represents the directory where MATLAB or the MATLAB Runtime is 
+  installed on the target machine. 
+  
 2. Files to Deploy and Package
 
--MIA_MATLAB.jar
+-MIA_MATLAB_Core.jar
 -MCRInstaller.exe 
-   - if end users are unable to download the MATLAB Runtime using the above  
-     link, include it when building your component by clicking 
-     the "Runtime downloaded from web" link in the Deployment Tool
+    Note: if end users are unable to download the MATLAB Runtime using the
+    instructions in the previous section, include it when building your 
+    component by clicking the "Runtime included in package" link in the
+    Deployment Tool.
 -Javadoc   
-   - javadoc for MIA_MATLAB is in the doc directory. While  
+   - javadoc for MIA_MATLAB_Core is in the doc directory. When  
      distributing the javadoc, this entire directory should be distributed.
 -This readme file
 
 
 3. Resources
 
-   - To learn more about Deploying Java applications on the Web, see Web Deployment in 
-     the MATLAB Java Package documentation in the MathWorks Documentation Center.   
+- To learn more about deploying Java applications on the Web, see Web Deployment in the 
+  MATLAB Java Package documentation in the MathWorks Documentation Center.   
 
 
 4. Definitions
 
-For information on deployment terminology, go to 
-http://www.mathworks.com/help. Select MATLAB Compiler >   
-Getting Started > About Application Deployment > 
-Deployment Product Terms in the MathWorks Documentation 
+For information on deployment terminology, go to
+http://www.mathworks.com/help and select MATLAB Compiler >
+Getting Started > About Application Deployment >
+Deployment Product Terms in the MathWorks Documentation
 Center.
-
-
-* NOTE: <mcr_root> is the directory where the MATLAB Runtime is installed on the target 
-        machine.
-
 
 5. Appendix 
 
-A. Linux x86-64 systems:   
-In the following directions, replace MCR_ROOT by the directory where the MATLAB Runtime 
-   is installed on the target machine.
 
-(1) Set the environment variable XAPPLRESDIR to this value:
-
-    MCR_ROOT/v901/X11/app-defaults
-
-
-(2) If the environment variable LD_LIBRARY_PATH is undefined, set it to the concatenation 
-   of the following strings:
-
-    MCR_ROOT/v901/runtime/glnxa64:
-    MCR_ROOT/v901/bin/glnxa64:
-    MCR_ROOT/v901/sys/os/glnxa64:
-    MCR_ROOT/v901/sys/opengl/lib/glnxa64
-
-    If it is defined, set it to the concatenation of these strings:
-
-    ${LD_LIBRARY_PATH}: 
-    MCR_ROOT/v901/runtime/glnxa64:
-    MCR_ROOT/v901/bin/glnxa64:
-    MCR_ROOT/v901/sys/os/glnxa64:
-    MCR_ROOT/v901/sys/opengl/lib/glnxa64
- 
-B. Mac systems: 
-In the following directions, replace MCR_ROOT by the directory where the MATLAB Runtime 
-   is installed on the target machine.
-
-If the environment variable DYLD_LIBRARY_PATH is undefined, set it to the concatenation 
-   of the following strings:
-
-    MCR_ROOT/v901/runtime/maci64:
-    MCR_ROOT/v901/sys/os/maci64:
-    MCR_ROOT/v901/bin/maci64
-
-If it is defined, set it to the concatenation of these strings:
-
-    ${LD_LIBRARY_PATH}: 
-    MCR_ROOT/v901/runtime/maci64:
-    MCR_ROOT/v901/sys/os/maci64:
-    MCR_ROOT/v901/bin/maci64
-
-   For more detail information about setting the MATLAB Runtime paths, see Package and 
+   For more detailed information about setting the MATLAB Runtime paths, see Package and 
    Distribute in the MATLAB Compiler SDK documentation in the MathWorks Documentation 
    Center.
 
@@ -128,4 +76,4 @@ If it is defined, set it to the concatenation of these strings:
               backslashes (\), delimited by semi-colons (;). 
               On Linux or Mac, the environment variable syntax utilizes   
               forward slashes (/), delimited by colons (:).  
-        NOTE: On Maci64, ensure you are using 64-bit JVM.
+        NOTE: Ensure that you are using a 64-bit JVM.

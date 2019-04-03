@@ -1,12 +1,8 @@
 /*
- * MATLAB Compiler: 6.2 (R2016a)
- * Date: Tue Mar 05 18:01:31 2019
- * Arguments: "-B" "macro_default" "-W" "java:MIA_MATLAB,AlphaShape" "-T" "link:lib" "-d" 
- * "C:\\Users\\steph\\Documents\\Java 
- * Projects\\MIA_MATLAB\\MATLAB\\MIA_MATLAB\\for_testing" 
- * "class{AlphaShape:C:\\Users\\steph\\Documents\\Java 
- * Projects\\MIA_MATLAB\\MATLAB\\AlphaShape\\fitAlphaSurface.m,C:\\Users\\steph\\Documents\\Java 
- * Projects\\MIA_MATLAB\\MATLAB\\AlphaShape\\fitAlphaSurfaceAuto.m}" 
+ * MATLAB Compiler: 7.0 (R2018b)
+ * Date: Wed Apr  3 15:20:18 2019
+ * Arguments: 
+ * "-B""macro_default""-W""java:MIA_MATLAB,AlphaShape""-T""link:lib""-d""F:\\JavaMATLABProjects\\MIA_MATLAB\\MATLAB\\MIA_MATLAB\\for_testing""class{AlphaShape:F:\\JavaMATLABProjects\\MIA_MATLAB\\MATLAB\\AlphaShape\\fitAlphaSurface.m,F:\\JavaMATLABProjects\\MIA_MATLAB\\MATLAB\\AlphaShape\\fitAlphaSurfaceAuto.m}"
  */
 
 package MIA_MATLAB;
@@ -22,7 +18,7 @@ public class MIA_MATLABMCRFactory
    
     
     /** Component's uuid */
-    private static final String sComponentId = "MIA_MATLAB_7B9DD9FEA7849C68A111A8A727379341";
+    private static final String sComponentId = "MIA_MATLAB_AA1FC8D4A37A256F41A82CBDE6DD6B64";
     
     /** Component name */
     private static final String sComponentName = "MIA_MATLAB";
@@ -52,7 +48,7 @@ public class MIA_MATLABMCRFactory
             MIA_MATLABMCRFactory.class, 
             sComponentName, 
             sComponentId,
-            new int[]{9,0,1}
+            new int[]{9,5,0}
         );
     }
     
