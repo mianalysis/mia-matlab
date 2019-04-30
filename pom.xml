@@ -13,7 +13,7 @@
 
     <groupId>wbif.sjx</groupId>
     <artifactId>MIA_MATLAB</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     <name>MIA_MATLAB</name>
     <url>https://github.com/SJCross/MIA_MATLAB</url>
@@ -209,6 +209,22 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <finalName>MIAMATLAB-${project.version}</finalName>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <mainClass>wbif.sjx.MIA_MATLAB.MIA_MATLAB</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
