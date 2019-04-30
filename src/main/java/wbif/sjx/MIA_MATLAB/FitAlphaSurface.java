@@ -130,7 +130,7 @@ public class FitAlphaSurface extends Module {
         double xyzConversion = dppZ/dppXY;
 
         // Converting the output into a series of Point<Integer> objects
-        Obj alphaShapeObject = new Obj(outputObjects.getName(),outputObjects.getNextID(),dppXY,dppZ,calibratedUnits,is2D);
+        Obj alphaShapeObject = new Obj(outputObjects.getName(),outputObjects.getAndIncrementID(),dppXY,dppZ,calibratedUnits,is2D);
         alphaShapeObject.setT(inputObject.getT());
         TreeSet<Point<Integer>> alphaShapePoints = convertMWToPoints(points);
         alphaShapeObject.setPoints(alphaShapePoints);
