@@ -13,7 +13,7 @@
 
     <groupId>wbif.sjx</groupId>
     <artifactId>MIA_MATLAB</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
     <name>MIA_MATLAB</name>
     <url>https://github.com/SJCross/MIA_MATLAB</url>
@@ -157,37 +157,13 @@
             <groupId>NA</groupId>
             <artifactId>javabuilder</artifactId>
             <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>C:/Program Files/MATLAB/R2018b/toolbox/javabuilder/jar/javabuilder.jar</systemPath>
+            <scope>${myscope}</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>install-external</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <file>${project.basedir}/MATLAB/Compiled/MIA_MATLAB_Core_v1.0.0.jar</file>
-                            <repositoryLayout>default</repositoryLayout>
-                            <groupId>wbif.sjx</groupId>
-                            <artifactId>MIA_MATLAB_Core</artifactId>
-                            <version>1.0.0</version>
-                            <packaging>jar</packaging>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
+        <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
@@ -197,6 +173,7 @@
                         </goals>
                         <phase>package</phase>
                         <configuration>
+                            <finalName>MIAMATLAB-${project.version}</finalName>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
@@ -209,22 +186,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <finalName>MIAMATLAB-${project.version}</finalName>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <mainClass>wbif.sjx.MIA_MATLAB.MIA_MATLAB</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
             </plugin>
         </plugins>
     </build>

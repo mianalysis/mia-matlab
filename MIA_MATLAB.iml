@@ -249,14 +249,6 @@
     <orderEntry type="library" name="Maven: sc.fiji:Skeletonize3D_:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: sc.fiji:VIB_:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: wbif.sjx:MIA_MATLAB_Core:1.0.0" level="project" />
-    <orderEntry type="module-library">
-      <library name="Maven: NA:javabuilder:1.0.0">
-        <CLASSES>
-          <root url="jar://C:/Program Files/MATLAB/R2018b/toolbox/javabuilder/jar/javabuilder.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Maven: NA:javabuilder:1.0.0" level="project" />
   </component>
 </module>
