@@ -13,7 +13,7 @@
 
     <groupId>wbif.sjx</groupId>
     <artifactId>MIA_MATLAB</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
     <name>MIA_MATLAB</name>
     <url>https://github.com/SJCross/MIA_MATLAB</url>
