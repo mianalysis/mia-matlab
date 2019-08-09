@@ -8,9 +8,11 @@ import com.mathworks.toolbox.javabuilder.MWStructArray;
 import ij.ImagePlus;
 import wbif.sjx.MIA.MIA;
 import wbif.sjx.MIA.Module.Module;
+import wbif.sjx.MIA.Module.ModuleCollection;
 import wbif.sjx.MIA.Module.PackageNames;
 import wbif.sjx.MIA.Object.*;
 import wbif.sjx.MIA.Object.Parameters.*;
+import wbif.sjx.MIA.Object.References.*;
 import wbif.sjx.MIA.Process.ColourFactory;
 import wbif.sjx.common.MathFunc.Indexer;
 import wbif.sjx.common.Object.LUTs;
@@ -27,6 +29,15 @@ public class FitAlphaSurface extends Module {
     public static final String ALPHA_RADIUS_MODE = "Alpha radius mode";
     public static final String ALPHA_RADIUS = "Alpha radius";
     public static final String MEASUREMENT_MODE = "Measurement mode";
+
+    public FitAlphaSurface(ModuleCollection modules) {
+        super("Fit alpha shape", modules);
+    }
+
+    @Override
+    public String getDescription() {
+        return "";
+    }
 
 
     public interface AlphaRadiusModes {
@@ -201,18 +212,8 @@ public class FitAlphaSurface extends Module {
 
 
     @Override
-    public String getTitle() {
-        return "Fit alpha shape";
-    }
-
-    @Override
     public String getPackageName() {
         return PackageNames.OBJECT_MEASUREMENTS_SPATIAL;
-    }
-
-    @Override
-    public String getHelp() {
-        return null;
     }
 
     @Override
@@ -329,69 +330,60 @@ public class FitAlphaSurface extends Module {
     }
 
     @Override
-    public MeasurementRefCollection updateAndGetImageMeasurementRefs() {
+    public ImageMeasurementRefCollection updateAndGetImageMeasurementRefs() {
         return null;
     }
 
     @Override
-    public MeasurementRefCollection updateAndGetObjectMeasurementRefs(ModuleCollection modules) {
-        objectMeasurementRefs.setAllCalculated(false);
+    public ObjMeasurementRefCollection updateAndGetObjectMeasurementRefs() {
+        ObjMeasurementRefCollection returnedRefs = new ObjMeasurementRefCollection();
 
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
         String measurementMode = parameters.getValue(MEASUREMENT_MODE);
 
-        MeasurementRef measurementRef = new MeasurementRef(Measurements.ALPHA_RADIUS);
-        measurementRef.setImageObjName(inputObjectsName);
-        measurementRef.setCalculated(true);
+        ObjMeasurementRef measurementRef = objectMeasurementRefs.getOrPut(Measurements.ALPHA_RADIUS);
+        measurementRef.setObjectsName(inputObjectsName);
         objectMeasurementRefs.add(measurementRef);
 
         switch (measurementMode) {
             case MeasurementModes.TWOD:
-                measurementRef = new MeasurementRef(Measurements.AREA_PX);
-                measurementRef.setImageObjName(inputObjectsName);
-                measurementRef.setCalculated(true);
-                objectMeasurementRefs.add(measurementRef);
+                measurementRef = objectMeasurementRefs.getOrPut(Measurements.AREA_PX);
+                measurementRef.setObjectsName(inputObjectsName);
+                returnedRefs.add(measurementRef);
 
-                measurementRef = new MeasurementRef(Units.replace(Measurements.AREA_CAL));
-                measurementRef.setImageObjName(inputObjectsName);
-                measurementRef.setCalculated(true);
-                objectMeasurementRefs.add(measurementRef);
+                measurementRef = objectMeasurementRefs.getOrPut(Units.replace(Measurements.AREA_CAL));
+                measurementRef.setObjectsName(inputObjectsName);
+                returnedRefs.add(measurementRef);
 
-                measurementRef = new MeasurementRef(Measurements.PERIMETER_PX);
-                measurementRef.setImageObjName(inputObjectsName);
-                measurementRef.setCalculated(true);
-                objectMeasurementRefs.add(measurementRef);
+                measurementRef = objectMeasurementRefs.getOrPut(Measurements.PERIMETER_PX);
+                measurementRef.setObjectsName(inputObjectsName);
+                returnedRefs.add(measurementRef);
 
-                measurementRef = new MeasurementRef(Units.replace(Measurements.PERIMETER_CAL));
-                measurementRef.setImageObjName(inputObjectsName);
-                measurementRef.setCalculated(true);
-                objectMeasurementRefs.add(measurementRef);
+                measurementRef = objectMeasurementRefs.getOrPut(Units.replace(Measurements.PERIMETER_CAL));
+                measurementRef.setObjectsName(inputObjectsName);
+                returnedRefs.add(measurementRef);
                 break;
 
             case MeasurementModes.THREED:
-                measurementRef = new MeasurementRef(Measurements.VOLUME_PX);
-                measurementRef.setImageObjName(inputObjectsName);
-                measurementRef.setCalculated(true);
-                objectMeasurementRefs.add(measurementRef);
+                measurementRef = objectMeasurementRefs.getOrPut(Measurements.VOLUME_PX);
+                measurementRef.setObjectsName(inputObjectsName);
+                returnedRefs.add(measurementRef);
 
-                measurementRef = new MeasurementRef(Units.replace(Measurements.VOLUME_CAL));
-                measurementRef.setImageObjName(inputObjectsName);
-                measurementRef.setCalculated(true);
-                objectMeasurementRefs.add(measurementRef);
+                measurementRef = objectMeasurementRefs.getOrPut(Units.replace(Measurements.VOLUME_CAL));
+                measurementRef.setObjectsName(inputObjectsName);
+                returnedRefs.add(measurementRef);
 
-                measurementRef = new MeasurementRef(Measurements.SURFACE_AREA_PX);
-                measurementRef.setImageObjName(inputObjectsName);
-                measurementRef.setCalculated(true);
-                objectMeasurementRefs.add(measurementRef);
+                measurementRef = objectMeasurementRefs.getOrPut(Measurements.SURFACE_AREA_PX);
+                measurementRef.setObjectsName(inputObjectsName);
+                returnedRefs.add(measurementRef);
 
-                measurementRef = new MeasurementRef(Units.replace(Measurements.SURFACE_AREA_CAL));
-                measurementRef.setImageObjName(inputObjectsName);
-                measurementRef.setCalculated(true);
-                objectMeasurementRefs.add(measurementRef);
+                measurementRef = objectMeasurementRefs.getOrPut(Units.replace(Measurements.SURFACE_AREA_CAL));
+                measurementRef.setObjectsName(inputObjectsName);
+                returnedRefs.add(measurementRef);
                 break;
         }
 
-        return objectMeasurementRefs;
+        return returnedRefs;
 
     }
 
@@ -401,15 +393,20 @@ public class FitAlphaSurface extends Module {
     }
 
     @Override
-    public RelationshipCollection updateAndGetRelationships() {
-        RelationshipCollection relationships = new RelationshipCollection();
+    public RelationshipRefCollection updateAndGetRelationships() {
+        RelationshipRefCollection returnedRefs = new RelationshipRefCollection();
 
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
         String alphaShapeObjectsName = parameters.getValue(OUTPUT_OBJECTS);
 
-        relationships.addRelationship(inputObjectsName,alphaShapeObjectsName);
+        RelationshipRef ref = relationshipRefs.getOrPut(inputObjectsName,alphaShapeObjectsName);
 
-        return relationships;
+        return returnedRefs;
 
+    }
+
+    @Override
+    public boolean verify() {
+        return true;
     }
 }
