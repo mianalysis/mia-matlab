@@ -1,12 +1,10 @@
 package wbif.sjx.MIA_MATLAB;
 
-import MIA_MATLAB_Core.AlphaShape;
 import com.mathworks.toolbox.javabuilder.MWClassID;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 import ij.ImagePlus;
-import wbif.sjx.MIA.MIA;
 import wbif.sjx.MIA.Module.Module;
 import wbif.sjx.MIA.Module.ModuleCollection;
 import wbif.sjx.MIA.Module.PackageNames;
@@ -17,8 +15,9 @@ import wbif.sjx.MIA.Process.ColourFactory;
 import wbif.sjx.common.MathFunc.Indexer;
 import wbif.sjx.common.Object.LUTs;
 import wbif.sjx.common.Object.Point;
+import wbif.sjx.common.Object.Volume.Volume;
+import wbif.sjx.common.Object.Volume.VolumeType;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -77,11 +76,11 @@ public class FitAlphaSurface extends Module {
 
     }
 
-    static MWNumericArray coordsToMW(TreeSet<Point<Integer>> points) {
-        double[][] pointArray = new double[points.size()][3];
+    static MWNumericArray coordsToMW(Volume surface) {
+        double[][] pointArray = new double[surface.size()][3];
 
         int i=0;
-        for (Point<Integer> point:points) {
+        for (Point<Integer> point:surface.getCoordinateSet()) {
             pointArray[i][0] = point.getX();
             pointArray[i][1] = point.getY();
             pointArray[i++][2] = point.getZ();
@@ -111,15 +110,12 @@ public class FitAlphaSurface extends Module {
 
     }
 
-    static Object[] getAlphaSurface(Obj inputObject, double alphaRadius) {
-        double dppXY = inputObject.getDistPerPxXY();
-        double dppZ = inputObject.getDistPerPxZ();
-        double xyzConversion = dppZ/dppXY;
+    static Object[] getAlphaSurface(Volume inputObject, double alphaRadius) {
+        double xyzConversion = inputObject.getDppZ()/inputObject.getDppXY();
 
         try {
             // Getting points in MathWorks format
-            TreeSet<Point<Integer>> surfacePoints = inputObject.getSurface();
-            MWNumericArray points = coordsToMW(surfacePoints);
+            MWNumericArray points = coordsToMW(inputObject);
 
             // Calculating the alpha shape
             if (alphaRadius == -1) {
@@ -134,14 +130,11 @@ public class FitAlphaSurface extends Module {
     }
 
     static Obj createAlphaSurfaceObject(ObjCollection outputObjects, Obj inputObject, MWNumericArray points, Image templateImage) {
-        double dppXY = inputObject.getDistPerPxXY();
-        double dppZ = inputObject.getDistPerPxZ();
-        String calibratedUnits = inputObject.getCalibratedUnits();
-        boolean is2D = inputObject.is2D();
-        double xyzConversion = dppZ/dppXY;
+        double dppXY = inputObject.getDppXY();
+        double dppZ = inputObject.getDppZ();
 
         // Converting the output into a series of Point<Integer> objects
-        Obj alphaShapeObject = new Obj(outputObjects.getName(),outputObjects.getAndIncrementID(),dppXY,dppZ,calibratedUnits,is2D);
+        Obj alphaShapeObject = new Obj(VolumeType.OCTREE,outputObjects.getName(),outputObjects.getAndIncrementID(),inputObject);
         alphaShapeObject.setT(inputObject.getT());
         TreeSet<Point<Integer>> alphaShapePoints = convertMWToPoints(points);
         alphaShapeObject.setPoints(alphaShapePoints);
@@ -165,8 +158,7 @@ public class FitAlphaSurface extends Module {
     }
 
     static void add2DMeasurements(Obj inputObject, MWStructArray results) {
-        double dppXY = inputObject.getDistPerPxXY();
-        double dppZ = inputObject.getDistPerPxZ();
+        double dppXY = inputObject.getDppXY();
 
         int idx = results.fieldIndex("area");
         double area = ((double[][]) results.get(idx+1))[0][0];
@@ -188,8 +180,7 @@ public class FitAlphaSurface extends Module {
     }
 
     static void add3DMeasurements(Obj inputObject, MWStructArray results) {
-        double dppXY = inputObject.getDistPerPxXY();
-        double dppZ = inputObject.getDistPerPxZ();
+        double dppXY = inputObject.getDppXY();
 
         int idx = results.fieldIndex("volume");
         double volume = ((double[][]) results.get(idx+1))[0][0];
@@ -248,9 +239,7 @@ public class FitAlphaSurface extends Module {
             if (!testFittingValidity(inputObject)) continue;
 
             // Getting surface
-            TreeSet<Point<Integer>> surfacePoints = inputObject.getSurface();
-            Obj surface = new Obj("Surface",inputObject.getID(),inputObject.getDistPerPxXY(),inputObject.getDistPerPxZ(),inputObject.getCalibratedUnits(),inputObject.is2D());
-            surface.setPoints(surfacePoints);
+            Volume surface = inputObject.getSurface();
 
             // Getting results of alpha shape fitting
             Object[] output = getAlphaSurface(surface,alphaRadius);
@@ -291,7 +280,7 @@ public class FitAlphaSurface extends Module {
             dispIpl.show();
         }
 
-        if (showOutput) inputObjects.showMeasurements(this,workspace.getAnalysis().getModules());
+        if (showOutput) inputObjects.showMeasurements(this,modules);
 
         return true;
 

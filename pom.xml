@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-<!--    <parent>-->
-<!--    <groupId>org.scijava</groupId>-->
-<!--    <artifactId>pom-scijava</artifactId>-->
-<!--    <version>24.0.0</version>-->
-<!--    <relativePath />-->
-<!--    </parent>-->
+    <parent>
+    <groupId>org.scijava</groupId>
+    <artifactId>pom-scijava</artifactId>
+    <version>27.0.1</version>
+    <relativePath />
+    </parent>
 
     <groupId>wbif.sjx</groupId>
     <artifactId>MIA_MATLAB</artifactId>
@@ -129,14 +129,14 @@
         </dependency>
 
         <dependency>
-<!--            <groupId>wbif.sjx</groupId>-->
-<!--            <artifactId>ModularImageAnalysis</artifactId>-->
-<!--            <version>0.10.12</version>-->
-<!--            <scope>${myscope}</scope>-->
-            <groupId>com.github.SJCross</groupId>
-            <artifactId>ModularImageAnalysis</artifactId>
-            <version>0.10.12</version>
+            <groupId>wbif.sjx</groupId>
+            <artifactId>MIA_</artifactId>
+            <version>0.11.0</version>
             <scope>${myscope}</scope>
+            <!--<groupId>com.github.SJCross</groupId>-->
+            <!--<artifactId>ModularImageAnalysis</artifactId>-->
+            <!--<version>0.10.12</version>-->
+            <!--<scope>${myscope}</scope>-->
         </dependency>
 
         <dependency>
