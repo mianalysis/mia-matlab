@@ -1,5 +1,6 @@
 package wbif.sjx.MIA_MATLAB;
 
+import MIA_MATLAB_Core.AlphaShape;
 import com.mathworks.toolbox.javabuilder.MWClassID;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
@@ -15,6 +16,7 @@ import wbif.sjx.MIA.Process.ColourFactory;
 import wbif.sjx.common.MathFunc.Indexer;
 import wbif.sjx.common.Object.LUTs;
 import wbif.sjx.common.Object.Point;
+import wbif.sjx.common.Object.Volume.PointOutOfRangeException;
 import wbif.sjx.common.Object.Volume.Volume;
 import wbif.sjx.common.Object.Volume.VolumeType;
 
@@ -90,9 +92,7 @@ public class FitAlphaSurface extends Module {
 
     }
 
-    static TreeSet<Point<Integer>> convertMWToPoints(MWNumericArray array) {
-        TreeSet<Point<Integer>> points = new TreeSet<>();
-
+    static void addPoints(MWNumericArray array, Obj object) {
         int nPoints = array.getDimensions()[0];
         Indexer indexer = new Indexer(nPoints,3);
         int[] data = array.getIntData();
@@ -102,12 +102,10 @@ public class FitAlphaSurface extends Module {
             int z = data[indexer.getIndex(new int[]{i,2})];
 
             // We can't have duplicate coordinates in the TreeSet, so this should automatically down-sample Z
-            points.add(new Point<>(x,y,z));
-
+            try {
+                object.add(new Point<>(x,y,z));
+            } catch (PointOutOfRangeException e) {}
         }
-
-        return points;
-
     }
 
     static Object[] getAlphaSurface(Volume inputObject, double alphaRadius) {
@@ -136,8 +134,7 @@ public class FitAlphaSurface extends Module {
         // Converting the output into a series of Point<Integer> objects
         Obj alphaShapeObject = new Obj(VolumeType.OCTREE,outputObjects.getName(),outputObjects.getAndIncrementID(),inputObject);
         alphaShapeObject.setT(inputObject.getT());
-        TreeSet<Point<Integer>> alphaShapePoints = convertMWToPoints(points);
-        alphaShapeObject.setPoints(alphaShapePoints);
+        addPoints(points,alphaShapeObject);
 
         // Removing any pixels outside the image area
         alphaShapeObject.cropToImageSize(templateImage);
@@ -273,7 +270,7 @@ public class FitAlphaSurface extends Module {
 
         if (showOutput) {
             HashMap<Integer,Float> hues = ColourFactory.getRandomHues(outputObjects);
-            ImagePlus dispIpl = outputObjects.convertObjectsToImage("Objects",null,hues,8,false).getImagePlus();
+            ImagePlus dispIpl = outputObjects.convertToImage("Objects",null,hues,8,false).getImagePlus();
             dispIpl.setLut(LUTs.Random(true));
             dispIpl.setPosition(1,1,1);
             dispIpl.updateChannelAndDraw();
