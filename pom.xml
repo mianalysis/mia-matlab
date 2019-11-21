@@ -4,16 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!--<parent>-->
-        <!--<groupId>org.scijava</groupId>-->
-        <!--<artifactId>pom-scijava</artifactId>-->
-        <!--<version>27.0.1</version>-->
-        <!--<relativePath />-->
-    <!--</parent>-->
+<!--    <parent>-->
+<!--        <groupId>org.scijava</groupId>-->
+<!--        <artifactId>pom-scijava</artifactId>-->
+<!--        <version>27.0.1</version>-->
+<!--        <relativePath />-->
+<!--    </parent>-->
 
     <groupId>wbif.sjx</groupId>
     <artifactId>MIA_MATLAB</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.1.3</version>
     <packaging>jar</packaging>
     <name>MIA_MATLAB</name>
     <url>https://github.com/SJCross/MIA_MATLAB</url>
@@ -105,12 +105,6 @@
             <name>ome-web-prod.lifesci.dundee.ac.uk-releases</name>
             <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
         </repository>
-
-        <repository>
-            <id>in-project</id>
-            <name>In Project Repo</name>
-            <url>file://${project.basedir}/MATLAB/Compiled</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -129,20 +123,45 @@
         </dependency>
 
         <dependency>
-            <!--<groupId>wbif.sjx</groupId>-->
-            <!--<artifactId>MIA_</artifactId>-->
-            <!--<version>0.11.19</version>-->
-            <!--<scope>${myscope}</scope>-->
+            <groupId>net.imagej</groupId>
+            <artifactId>imagej</artifactId>
+            <version>2.0.0-rc-71</version>
+            <scope>${myscope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.imagej</groupId>
+            <artifactId>imagej-ui-swing</artifactId>
+            <version>0.22.0</version>
+            <scope>${myscope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.imagej</groupId>
+            <artifactId>imagej-legacy</artifactId>
+            <version>0.35.0</version>
+            <scope>${myscope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.imagej</groupId>
+            <artifactId>imagej-ops</artifactId>
+            <version>0.45.0</version>
+            <scope>${myscope}</scope>
+        </dependency>
+
+        <dependency>
+            <!--            <groupId>wbif.sjx</groupId>-->
+            <!--            <artifactId>MIA_</artifactId>-->
+            <!--            <version>0.11.21-SNAPSHOT</version>-->
+            <!--            <scope>${myscope}</scope>-->
             <groupId>com.github.SJCross</groupId>
             <artifactId>ModularImageAnalysis</artifactId>
-            <version>0.11.19</version>
+            <version>0.11.20</version>
             <scope>${myscope}</scope>
         </dependency>
 
         <dependency>
             <groupId>wbif.sjx</groupId>
             <artifactId>MIA_MATLAB_Core</artifactId>
-            <version>1.0.0</version>
+            <version>1.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -156,17 +175,18 @@
 
     <build>
         <plugins>
-        <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.5</version>
                 <executions>
                     <execution>
-                        <!--<goals>-->
-                            <!--<goal>attached</goal>-->
-                        <!--</goals>-->
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
                         <phase>package</phase>
                         <configuration>
-                            <finalName>MIAMATLAB-${project.version}</finalName>
+                            <finalName>MIA_MATLAB-${project.version}</finalName>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>

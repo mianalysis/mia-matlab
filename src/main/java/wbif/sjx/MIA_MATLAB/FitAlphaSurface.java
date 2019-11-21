@@ -24,9 +24,10 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 public class FitAlphaSurface extends Module {
+    public static final String INPUT_SEPARATOR = "Object input/output";
     public static final String INPUT_OBJECTS = "Input objects";
     public static final String OUTPUT_OBJECTS = "Output objects";
-    public static final String TEMPLATE_IMAGE = "Template image";
+    public static final String ALPHA_SHAPE_SEPARATOR = "Alpha shape controls";
     public static final String ALPHA_RADIUS_MODE = "Alpha radius mode";
     public static final String ALPHA_RADIUS = "Alpha radius";
     public static final String MEASUREMENT_MODE = "Measurement mode";
@@ -74,7 +75,9 @@ public class FitAlphaSurface extends Module {
 
     static boolean testFittingValidity(Obj inputObject) {
         double[][] extents = inputObject.getExtents(true,false);
-        return !(extents[0][0] == extents[0][1] || extents[1][0] == extents[1][1] || extents[2][0] == extents[2][1]);
+
+        // Only testing XY extents as we can work with shapes in 2D
+        return !(extents[0][0] == extents[0][1] || extents[1][0] == extents[1][1]);
 
     }
 
@@ -127,7 +130,7 @@ public class FitAlphaSurface extends Module {
         }
     }
 
-    static Obj createAlphaSurfaceObject(ObjCollection outputObjects, Obj inputObject, MWNumericArray points, Image templateImage) {
+    static Obj createAlphaSurfaceObject(ObjCollection outputObjects, Obj inputObject, MWNumericArray points) {
         double dppXY = inputObject.getDppXY();
         double dppZ = inputObject.getDppZ();
 
@@ -135,9 +138,6 @@ public class FitAlphaSurface extends Module {
         Obj alphaShapeObject = new Obj(VolumeType.OCTREE,outputObjects.getName(),outputObjects.getAndIncrementID(),inputObject);
         alphaShapeObject.setT(inputObject.getT());
         addPoints(points,alphaShapeObject);
-
-        // Removing any pixels outside the image area
-        alphaShapeObject.cropToImageSize(templateImage);
 
         // Assigning relationship
         inputObject.addChild(alphaShapeObject);
@@ -212,8 +212,6 @@ public class FitAlphaSurface extends Module {
 
         // Getting parameters
         String outputObjectsName = parameters.getValue(OUTPUT_OBJECTS);
-        String templateImageName = parameters.getValue(TEMPLATE_IMAGE);
-        Image templateImage = workspace.getImage(templateImageName);
         String alphaRadiusMode = parameters.getValue(ALPHA_RADIUS_MODE);
         double alphaRadius = parameters.getValue(ALPHA_RADIUS);
         String measurementMode = parameters.getValue(MEASUREMENT_MODE);
@@ -249,7 +247,7 @@ public class FitAlphaSurface extends Module {
 
             // Creating object
             writeMessage("Creating alpha surface object");
-            Obj alphaShapeObject = createAlphaSurfaceObject(outputObjects,inputObject,(MWNumericArray) output[0],templateImage);
+            Obj alphaShapeObject = createAlphaSurfaceObject(outputObjects,inputObject,(MWNumericArray) output[0]);
 
             // Assigning measurements
             addCommonMeasurements(inputObject,(MWStructArray) output[1]);
@@ -285,9 +283,10 @@ public class FitAlphaSurface extends Module {
 
     @Override
     protected void initialiseParameters() {
+        parameters.add(new ParamSeparatorP(INPUT_SEPARATOR,this));
         parameters.add(new InputObjectsP(INPUT_OBJECTS,this));
         parameters.add(new OutputObjectsP(OUTPUT_OBJECTS,this));
-        parameters.add(new InputImageP(TEMPLATE_IMAGE,this));
+        parameters.add(new ParamSeparatorP(ALPHA_SHAPE_SEPARATOR,this));
         parameters.add(new ChoiceP(ALPHA_RADIUS_MODE,this,AlphaRadiusModes.AUTOMATIC,AlphaRadiusModes.ALL));
         parameters.add(new DoubleP(ALPHA_RADIUS,this,1));
         parameters.add(new ChoiceP(MEASUREMENT_MODE,this,MeasurementModes.NONE,MeasurementModes.ALL));
@@ -298,10 +297,11 @@ public class FitAlphaSurface extends Module {
     public ParameterCollection updateAndGetParameters() {
         ParameterCollection returnedParameters = new ParameterCollection();
 
+        returnedParameters.add(parameters.getParameter(INPUT_SEPARATOR));
         returnedParameters.add(parameters.getParameter(INPUT_OBJECTS));
         returnedParameters.add(parameters.getParameter(OUTPUT_OBJECTS));
-        returnedParameters.add(parameters.getParameter(TEMPLATE_IMAGE));
 
+        returnedParameters.add(parameters.getParameter(ALPHA_SHAPE_SEPARATOR));
         returnedParameters.add(parameters.getParameter(ALPHA_RADIUS_MODE));
         switch ((String) parameters.getValue(ALPHA_RADIUS_MODE)) {
             case AlphaRadiusModes.MANUAL:
