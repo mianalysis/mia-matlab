@@ -4,6 +4,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/MATLAB/Compiled/MIA_MATLAB_Core-1.0.0.pom" />
       </list>
     </option>
   </component>

@@ -1,5 +1,6 @@
 package wbif.sjx.MIA_MATLAB;
 
+import net.imagej.ImageJ;
 import wbif.sjx.MIA.MIA;
 
 public class MIA_MATLAB {

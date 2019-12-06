@@ -6,7 +6,6 @@ import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 import ij.ImagePlus;
-import wbif.sjx.MIA.MIA;
 import wbif.sjx.MIA.Module.Module;
 import wbif.sjx.MIA.Module.ModuleCollection;
 import wbif.sjx.MIA.Module.PackageNames;
@@ -17,15 +16,18 @@ import wbif.sjx.MIA.Process.ColourFactory;
 import wbif.sjx.common.MathFunc.Indexer;
 import wbif.sjx.common.Object.LUTs;
 import wbif.sjx.common.Object.Point;
+import wbif.sjx.common.Object.Volume.PointOutOfRangeException;
+import wbif.sjx.common.Object.Volume.Volume;
+import wbif.sjx.common.Object.Volume.VolumeType;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeSet;
 
 public class FitAlphaSurface extends Module {
+    public static final String INPUT_SEPARATOR = "Object input/output";
     public static final String INPUT_OBJECTS = "Input objects";
     public static final String OUTPUT_OBJECTS = "Output objects";
-    public static final String TEMPLATE_IMAGE = "Template image";
+    public static final String ALPHA_SHAPE_SEPARATOR = "Alpha shape controls";
     public static final String ALPHA_RADIUS_MODE = "Alpha radius mode";
     public static final String ALPHA_RADIUS = "Alpha radius";
     public static final String MEASUREMENT_MODE = "Measurement mode";
@@ -73,15 +75,17 @@ public class FitAlphaSurface extends Module {
 
     static boolean testFittingValidity(Obj inputObject) {
         double[][] extents = inputObject.getExtents(true,false);
-        return !(extents[0][0] == extents[0][1] || extents[1][0] == extents[1][1] || extents[2][0] == extents[2][1]);
+
+        // Only testing XY extents as we can work with shapes in 2D
+        return !(extents[0][0] == extents[0][1] || extents[1][0] == extents[1][1]);
 
     }
 
-    static MWNumericArray coordsToMW(TreeSet<Point<Integer>> points) {
-        double[][] pointArray = new double[points.size()][3];
+    static MWNumericArray coordsToMW(Volume surface) {
+        double[][] pointArray = new double[surface.size()][3];
 
         int i=0;
-        for (Point<Integer> point:points) {
+        for (Point<Integer> point:surface.getCoordinateSet()) {
             pointArray[i][0] = point.getX();
             pointArray[i][1] = point.getY();
             pointArray[i++][2] = point.getZ();
@@ -91,9 +95,7 @@ public class FitAlphaSurface extends Module {
 
     }
 
-    static TreeSet<Point<Integer>> convertMWToPoints(MWNumericArray array) {
-        TreeSet<Point<Integer>> points = new TreeSet<>();
-
+    static void addPoints(MWNumericArray array, Obj object) {
         int nPoints = array.getDimensions()[0];
         Indexer indexer = new Indexer(nPoints,3);
         int[] data = array.getIntData();
@@ -103,23 +105,18 @@ public class FitAlphaSurface extends Module {
             int z = data[indexer.getIndex(new int[]{i,2})];
 
             // We can't have duplicate coordinates in the TreeSet, so this should automatically down-sample Z
-            points.add(new Point<>(x,y,z));
-
+            try {
+                object.add(new Point<>(x,y,z));
+            } catch (PointOutOfRangeException e) {}
         }
-
-        return points;
-
     }
 
-    static Object[] getAlphaSurface(Obj inputObject, double alphaRadius) {
-        double dppXY = inputObject.getDistPerPxXY();
-        double dppZ = inputObject.getDistPerPxZ();
-        double xyzConversion = dppZ/dppXY;
+    static Object[] getAlphaSurface(Volume inputObject, double alphaRadius) {
+        double xyzConversion = inputObject.getDppZ()/inputObject.getDppXY();
 
         try {
             // Getting points in MathWorks format
-            TreeSet<Point<Integer>> surfacePoints = inputObject.getSurface();
-            MWNumericArray points = coordsToMW(surfacePoints);
+            MWNumericArray points = coordsToMW(inputObject);
 
             // Calculating the alpha shape
             if (alphaRadius == -1) {
@@ -133,21 +130,14 @@ public class FitAlphaSurface extends Module {
         }
     }
 
-    static Obj createAlphaSurfaceObject(ObjCollection outputObjects, Obj inputObject, MWNumericArray points, Image templateImage) {
-        double dppXY = inputObject.getDistPerPxXY();
-        double dppZ = inputObject.getDistPerPxZ();
-        String calibratedUnits = inputObject.getCalibratedUnits();
-        boolean is2D = inputObject.is2D();
-        double xyzConversion = dppZ/dppXY;
+    static Obj createAlphaSurfaceObject(ObjCollection outputObjects, Obj inputObject, MWNumericArray points) {
+        double dppXY = inputObject.getDppXY();
+        double dppZ = inputObject.getDppZ();
 
         // Converting the output into a series of Point<Integer> objects
-        Obj alphaShapeObject = new Obj(outputObjects.getName(),outputObjects.getAndIncrementID(),dppXY,dppZ,calibratedUnits,is2D);
+        Obj alphaShapeObject = new Obj(VolumeType.OCTREE,outputObjects.getName(),outputObjects.getAndIncrementID(),inputObject);
         alphaShapeObject.setT(inputObject.getT());
-        TreeSet<Point<Integer>> alphaShapePoints = convertMWToPoints(points);
-        alphaShapeObject.setPoints(alphaShapePoints);
-
-        // Removing any pixels outside the image area
-        alphaShapeObject.cropToImageSize(templateImage);
+        addPoints(points,alphaShapeObject);
 
         // Assigning relationship
         inputObject.addChild(alphaShapeObject);
@@ -165,8 +155,7 @@ public class FitAlphaSurface extends Module {
     }
 
     static void add2DMeasurements(Obj inputObject, MWStructArray results) {
-        double dppXY = inputObject.getDistPerPxXY();
-        double dppZ = inputObject.getDistPerPxZ();
+        double dppXY = inputObject.getDppXY();
 
         int idx = results.fieldIndex("area");
         double area = ((double[][]) results.get(idx+1))[0][0];
@@ -188,8 +177,7 @@ public class FitAlphaSurface extends Module {
     }
 
     static void add3DMeasurements(Obj inputObject, MWStructArray results) {
-        double dppXY = inputObject.getDistPerPxXY();
-        double dppZ = inputObject.getDistPerPxZ();
+        double dppXY = inputObject.getDppXY();
 
         int idx = results.fieldIndex("volume");
         double volume = ((double[][]) results.get(idx+1))[0][0];
@@ -224,8 +212,6 @@ public class FitAlphaSurface extends Module {
 
         // Getting parameters
         String outputObjectsName = parameters.getValue(OUTPUT_OBJECTS);
-        String templateImageName = parameters.getValue(TEMPLATE_IMAGE);
-        Image templateImage = workspace.getImage(templateImageName);
         String alphaRadiusMode = parameters.getValue(ALPHA_RADIUS_MODE);
         double alphaRadius = parameters.getValue(ALPHA_RADIUS);
         String measurementMode = parameters.getValue(MEASUREMENT_MODE);
@@ -248,9 +234,7 @@ public class FitAlphaSurface extends Module {
             if (!testFittingValidity(inputObject)) continue;
 
             // Getting surface
-            TreeSet<Point<Integer>> surfacePoints = inputObject.getSurface();
-            Obj surface = new Obj("Surface",inputObject.getID(),inputObject.getDistPerPxXY(),inputObject.getDistPerPxZ(),inputObject.getCalibratedUnits(),inputObject.is2D());
-            surface.setPoints(surfacePoints);
+            Volume surface = inputObject.getSurface();
 
             // Getting results of alpha shape fitting
             Object[] output = getAlphaSurface(surface,alphaRadius);
@@ -263,7 +247,7 @@ public class FitAlphaSurface extends Module {
 
             // Creating object
             writeMessage("Creating alpha surface object");
-            Obj alphaShapeObject = createAlphaSurfaceObject(outputObjects,inputObject,(MWNumericArray) output[0],templateImage);
+            Obj alphaShapeObject = createAlphaSurfaceObject(outputObjects,inputObject,(MWNumericArray) output[0]);
 
             // Assigning measurements
             addCommonMeasurements(inputObject,(MWStructArray) output[1]);
@@ -284,14 +268,14 @@ public class FitAlphaSurface extends Module {
 
         if (showOutput) {
             HashMap<Integer,Float> hues = ColourFactory.getRandomHues(outputObjects);
-            ImagePlus dispIpl = outputObjects.convertObjectsToImage("Objects",null,hues,8,false).getImagePlus();
+            ImagePlus dispIpl = outputObjects.convertToImage("Objects",null,hues,8,false).getImagePlus();
             dispIpl.setLut(LUTs.Random(true));
             dispIpl.setPosition(1,1,1);
             dispIpl.updateChannelAndDraw();
             dispIpl.show();
         }
 
-        if (showOutput) inputObjects.showMeasurements(this,workspace.getAnalysis().getModules());
+        if (showOutput) inputObjects.showMeasurements(this,modules);
 
         return true;
 
@@ -299,9 +283,10 @@ public class FitAlphaSurface extends Module {
 
     @Override
     protected void initialiseParameters() {
+        parameters.add(new ParamSeparatorP(INPUT_SEPARATOR,this));
         parameters.add(new InputObjectsP(INPUT_OBJECTS,this));
         parameters.add(new OutputObjectsP(OUTPUT_OBJECTS,this));
-        parameters.add(new InputImageP(TEMPLATE_IMAGE,this));
+        parameters.add(new ParamSeparatorP(ALPHA_SHAPE_SEPARATOR,this));
         parameters.add(new ChoiceP(ALPHA_RADIUS_MODE,this,AlphaRadiusModes.AUTOMATIC,AlphaRadiusModes.ALL));
         parameters.add(new DoubleP(ALPHA_RADIUS,this,1));
         parameters.add(new ChoiceP(MEASUREMENT_MODE,this,MeasurementModes.NONE,MeasurementModes.ALL));
@@ -312,10 +297,11 @@ public class FitAlphaSurface extends Module {
     public ParameterCollection updateAndGetParameters() {
         ParameterCollection returnedParameters = new ParameterCollection();
 
+        returnedParameters.add(parameters.getParameter(INPUT_SEPARATOR));
         returnedParameters.add(parameters.getParameter(INPUT_OBJECTS));
         returnedParameters.add(parameters.getParameter(OUTPUT_OBJECTS));
-        returnedParameters.add(parameters.getParameter(TEMPLATE_IMAGE));
 
+        returnedParameters.add(parameters.getParameter(ALPHA_SHAPE_SEPARATOR));
         returnedParameters.add(parameters.getParameter(ALPHA_RADIUS_MODE));
         switch ((String) parameters.getValue(ALPHA_RADIUS_MODE)) {
             case AlphaRadiusModes.MANUAL:

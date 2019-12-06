@@ -1,9 +1,9 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="3806371039" file="F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB.prj" location="F:\JavaMATLABProjects\MIA_MATLAB\MATLAB" name="MIA_MATLAB" preferred-package-location="F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
+  <configuration build-checksum="2436488583" file="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB.prj" location="F:\Java Projects\MIA_MATLAB\MATLAB" name="MIA_MATLAB" preferred-package-location="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
     <param.appname>MIA_MATLAB_Core</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.0</param.version>
+    <param.version>1.1</param.version>
     <param.authnamewatermark />
     <param.email />
     <param.company />
@@ -45,13 +45,12 @@
     <param.net.tsa.namespace />
     <param.net.tsa.superclass>AlphaShape</param.net.tsa.superclass>
     <param.net.tsa.metadata />
-    <param.net.tsa.metadata.assembly>F:\JavaMATLABProjects\MIA_MATLAB\MATLAB</param.net.tsa.metadata.assembly>
+    <param.net.tsa.metadata.assembly>F:\Java Projects\MIA_MATLAB\MATLAB</param.net.tsa.metadata.assembly>
     <param.net.saved.interface />
     <param.cpp.api>option.cpp.all</param.cpp.api>
     <unset>
       <param.icon />
       <param.icons />
-      <param.version />
       <param.authnamewatermark />
       <param.email />
       <param.company />
@@ -98,12 +97,16 @@
     </unset>
     <fileset.exports>
       <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface.m</file>
+      <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface2D.m</file>
+      <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface3D.m</file>
       <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurfaceAuto.m</file>
     </fileset.exports>
     <fileset.classes>
       <entity.package name="">
         <entity.class name="AlphaShape">
           <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface.m</file>
+          <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface2D.m</file>
+          <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface3D.m</file>
           <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurfaceAuto.m</file>
         </entity.class>
       </entity.package>
@@ -114,9 +117,9 @@
     <fileset.examples />
     <fileset.documentation />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="doc" optional="false">F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\doc</file>
-      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="readme.txt" optional="true">F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\readme.txt</file>
-      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="MIA_MATLAB_Core.jar" optional="false">F:\JavaMATLABProjects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\MIA_MATLAB_Core.jar</file>
+      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="MIA_MATLAB_Core.jar" optional="false">F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\MIA_MATLAB_Core.jar</file>
+      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="readme.txt" optional="true">F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\MIA_MATLAB\for_testing" name="doc" optional="false">F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_testing\doc</file>
     </build-deliverables>
     <workflow />
     <matlab>
