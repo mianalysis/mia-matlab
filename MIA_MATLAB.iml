@@ -161,7 +161,7 @@
     <orderEntry type="library" name="Maven: org.joml:joml:1.9.12" level="project" />
     <orderEntry type="library" name="Maven: org.ojalgo:ojalgo:45.1.1" level="project" />
     <orderEntry type="library" name="Maven: gov.nist.math:jama:1.0.3" level="project" />
-    <orderEntry type="library" name="Maven: com.github.SJCross:ModularImageAnalysis:0.11.20" level="project" />
+    <orderEntry type="library" name="Maven: com.github.SJCross:ModularImageAnalysis:0.11.22" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.plugins:maven-project-info-reports-plugin:maven-plugin:2.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.reporting:maven-reporting-impl:2.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.shared:maven-shared-utils:0.6" level="project" />
@@ -289,7 +289,7 @@
     <orderEntry type="library" name="Maven: de.biomedical-imaging.imagej:ij_ridge_detect:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: io.github.classgraph:classgraph:4.8.54" level="project" />
     <orderEntry type="library" name="Maven: com.atlassian.commonmark:commonmark:0.12.1" level="project" />
-    <orderEntry type="library" name="Maven: com.github.SJCross:Common:v1.5.12" level="project" />
+    <orderEntry type="library" name="Maven: com.github.SJCross:Common:v1.5.14" level="project" />
     <orderEntry type="library" name="Maven: ome:bio-formats_plugins:6.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.openmicroscopy:ome-common:6.0.3" level="project" />
     <orderEntry type="library" name="Maven: io.minio:minio:5.0.2" level="project" />
@@ -350,7 +350,7 @@
     <orderEntry type="library" name="Maven: sc.fiji:LocalThickness_:4.0.0" level="project" />
     <orderEntry type="library" name="Maven: sc.fiji:Skeletonize3D_:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: sc.fiji:VIB_:3.0.0" level="project" />
-    <orderEntry type="library" name="Maven: wbif.sjx:MIA_MATLAB_Core:1.1" level="project" />
+    <orderEntry type="library" name="Maven: wbif.sjx:MIA_MATLAB_Core:1.2" level="project" />
     <orderEntry type="library" name="Maven: NA:javabuilder:1.0.0" level="project" />
   </component>
 </module>

@@ -61,4 +61,7 @@ res.surfaceArea = NaN;
 if verbose
     javaMethod('println',java.lang.System.out,'[Fit alpha shape] Fitting complete');
 end
+
+clear pts radius verbose inside minX maxX minY maxY
+
 end

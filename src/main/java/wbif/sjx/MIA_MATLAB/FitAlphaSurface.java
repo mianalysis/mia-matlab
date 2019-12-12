@@ -119,10 +119,17 @@ public class FitAlphaSurface extends Module {
             MWNumericArray points = coordsToMW(inputObject);
 
             // Calculating the alpha shape
+            AlphaShape alphaShape = new AlphaShape();
             if (alphaRadius == -1) {
-                return new AlphaShape().fitAlphaSurfaceAuto(2, points, xyzConversion, false);
+                Object[] results = alphaShape.fitAlphaSurfaceAuto(2, points, xyzConversion, false);
+                alphaShape.dispose();
+                points.dispose();
+                return results;
             } else {
-                return new AlphaShape().fitAlphaSurface(2, points, alphaRadius, xyzConversion, false);
+                Object[] results = alphaShape.fitAlphaSurface(2, points, alphaRadius, xyzConversion, false);
+                alphaShape.dispose();
+                points.dispose();
+                return results;
             }
         } catch (MWException e) {
             e.printStackTrace();
@@ -247,7 +254,8 @@ public class FitAlphaSurface extends Module {
 
             // Creating object
             writeMessage("Creating alpha surface object");
-            Obj alphaShapeObject = createAlphaSurfaceObject(outputObjects,inputObject,(MWNumericArray) output[0]);
+            MWNumericArray points = (MWNumericArray) output[0];
+            Obj alphaShapeObject = createAlphaSurfaceObject(outputObjects,inputObject,points);
 
             // Assigning measurements
             addCommonMeasurements(inputObject,(MWStructArray) output[1]);
@@ -260,6 +268,10 @@ public class FitAlphaSurface extends Module {
                     break;
             }
             outputObjects.add(alphaShapeObject);
+
+            points.dispose();
+            results.dispose();
+            output = null;
 
         }
 
