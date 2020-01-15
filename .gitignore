@@ -4,11 +4,8 @@ target/site/*
 !target/site/dependencies.html
 !target/site/images/
 
-\.idea/workspace\.xml
-\.idea/libraries/
+.idea/workspace\.xml
+.idea/libraries/
 
+MATLAB/MIA_MATLAB/*
 
-
-MATLAB/MIA_MATLAB\.prj
-
-MATLAB/MIA_MATLAB/
