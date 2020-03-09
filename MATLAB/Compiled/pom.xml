@@ -8,5 +8,4 @@
     <description>POM was created from install:install-file</description>
 </project>
 
-
         <!--Start terminal in Compiled folder, then run "mvn install:install-file -Dfile=MIA_MATLAB_Core_v1.1.jar -DpomFile=pom.xml"-->
