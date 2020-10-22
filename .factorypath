@@ -331,6 +331,6 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/sc/fiji/LocalThickness_/4.0.0/LocalThickness_-4.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/sc/fiji/Skeletonize3D_/2.0.0/Skeletonize3D_-2.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/sc/fiji/VIB_/3.0.0/VIB_-3.0.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/wbif/sjx/MIA_MATLAB_Core/1.2/MIA_MATLAB_Core-1.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/wbif/sjx/MIA_MATLAB_Core/1.3/MIA_MATLAB_Core-1.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/NA/javabuilder/1.0.0/javabuilder-1.0.0.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>
