@@ -148,14 +148,14 @@
         </dependency>
 
         <dependency>
-            <!--            <groupId>wbif.sjx</groupId>-->
-            <!--            <artifactId>MIA_</artifactId>-->
-            <!--            <version>0.11.21-SNAPSHOT</version>-->
-            <!--            <scope>${myscope}</scope>-->
-            <groupId>com.github.SJCross</groupId>
+            <groupId>wbif.sjx</groupId>
+            <artifactId>MIA_</artifactId>
+            <version>0.15.19</version>
+            <scope>${myscope}</scope>
+            <!-- <groupId>com.github.SJCross</groupId>
             <artifactId>ModularImageAnalysis</artifactId>
             <version>0.15.4</version>
-            <scope>${myscope}</scope>
+            <scope>${myscope}</scope> -->
         </dependency>
 
         <dependency>

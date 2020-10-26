@@ -16,7 +16,7 @@ import wbif.sjx.MIA.Object.Units;
 import wbif.sjx.MIA.Object.Workspace;
 import wbif.sjx.MIA.Object.Parameters.ChoiceP;
 import wbif.sjx.MIA.Object.Parameters.InputObjectsP;
-import wbif.sjx.MIA.Object.Parameters.ParamSeparatorP;
+import wbif.sjx.MIA.Object.Parameters.SeparatorP;
 import wbif.sjx.MIA.Object.Parameters.ParameterCollection;
 import wbif.sjx.MIA.Object.Parameters.Objects.OutputObjectsP;
 import wbif.sjx.MIA.Object.Parameters.Text.DoubleP;
@@ -290,10 +290,10 @@ public class FitAlphaSurface extends CoreMATLABModule {
 
     @Override
     protected void initialiseParameters() {
-        parameters.add(new ParamSeparatorP(INPUT_SEPARATOR, this));
+        parameters.add(new SeparatorP(INPUT_SEPARATOR, this));
         parameters.add(new InputObjectsP(INPUT_OBJECTS, this));
         parameters.add(new OutputObjectsP(OUTPUT_OBJECTS, this));
-        parameters.add(new ParamSeparatorP(ALPHA_SHAPE_SEPARATOR, this));
+        parameters.add(new SeparatorP(ALPHA_SHAPE_SEPARATOR, this));
         parameters.add(new ChoiceP(ALPHA_RADIUS_MODE, this, AlphaRadiusModes.AUTOMATIC, AlphaRadiusModes.ALL));
         parameters.add(new DoubleP(ALPHA_RADIUS, this, 1));
         parameters.add(new ChoiceP(MEASUREMENT_MODE, this, MeasurementModes.NONE, MeasurementModes.ALL));
