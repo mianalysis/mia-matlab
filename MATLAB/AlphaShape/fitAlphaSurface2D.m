@@ -5,7 +5,7 @@ pts = double(pts)+1;
 
 % Fitting alpha shape
 if verbose
-    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Fitting alpha shape');
+    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Fitting alpha shape');
 end
 
 % Getting coordinate limits
@@ -24,7 +24,7 @@ end
 res.alpha = shp.Alpha;
 
 if verbose
-    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Fitting complete');
+    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Fitting complete');
 end
 
 % Testing if the alpha shape was formed correctly
@@ -34,7 +34,7 @@ if shp.area == 0
 end
 
 if verbose
-    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Extracting internal points');
+    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Extracting internal points');
 end
 
 % Creating an array to hold logical values of which pixels are inside the
@@ -49,7 +49,7 @@ in_pts(:,2) = in_pts(:,2) + minY - 2;
 in_pts(:,3) = 0; % Z is always 0 in 2D
 
 if verbose
-    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Adding measurements');
+    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Adding measurements');
 end
 
 % Adding results
@@ -59,7 +59,7 @@ res.volume = NaN;
 res.surfaceArea = NaN;
 
 if verbose
-    javaMethod('println',java.lang.System.out,'[Fit alpha shape] Fitting complete');
+    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Fitting complete');
 end
 
 clear pts radius verbose inside minX maxX minY maxY

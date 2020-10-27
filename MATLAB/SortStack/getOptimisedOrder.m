@@ -11,7 +11,7 @@ nIm = size(stack,3);
 
 % Creating forward order
 if verbose
-    javaMethod('println',java.lang.System.out,'[Sort stack] Sorting forward (0%)');
+    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Sort stack] Sorting forward (0%)');
 end
 
 % Creating a store for the slice order
@@ -19,7 +19,7 @@ ord = zeros(nIm,2);
 ord(:,1) = 1:nIm;
 
 count = 0;
-total = (nIm*(nIm+1))/2;
+total = ((nIm-1)*(nIm))/2;
 for i = 1:nIm
     idx = i+1:nIm;
     vals = zeros(1,numel(idx));
@@ -27,6 +27,13 @@ for i = 1:nIm
     for j = i+1:nIm
         corr_im = normxcorr2(stack(:,:,i),stack(:,:,j));
         vals(j-i) = max(corr_im(:));
+        
+        if verbose
+            count = count + 1;
+            pc = sprintf('%0.2f',(100*count/total));
+            str = ['[Sort stack] Sorting forward (',num2str(pc),'%)'];
+            javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,str);
+        end
     end
     
     max_pos = find(vals == max(vals),1);
@@ -42,13 +49,6 @@ for i = 1:nIm
     else
         ord(i,2) = idx(max_pos);
     end
-    
-    if verbose
-        count = count + 1;
-        pc = sprintf('%0.2f',(100*count/total));
-        str = ['[Sort stack] Sorting forward (',num2str(pc),'%)'];
-        javaMethod('println',java.lang.System.out,str);
-    end    
 end
 
 % Determining slice order based on minimum cost
@@ -60,7 +60,7 @@ ord = flip(ord,1);
 stack = flip(stack,3);
 
 if verbose
-    javaMethod('println',java.lang.System.out,'[Sort stack] Sorting backward (0%)');
+    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Sort stack] Sorting backward (0%)');
 end
 
 count = 0;
@@ -72,6 +72,13 @@ for i = 1:nIm
     for j = i+1:nIm
         corr_im = normxcorr2(stack(:,:,i),stack(:,:,j));
         vals(j-i) = max(corr_im(:));
+        
+        if verbose
+            count = count + 1;
+            pc = sprintf('%0.2f',(100*count/total));
+            str = ['[Sort stack] Sorting backward (',num2str(pc),'%)'];
+            javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,str);
+        end
     end
     
     max_pos = find(vals == max(vals),1);
@@ -86,13 +93,6 @@ for i = 1:nIm
         ord(i,2) = i;
     else
         ord(i,2) = idx(max_pos);
-    end
-    
-    if verbose
-        count = count + 1;
-        pc = sprintf('%0.2f',(100*count/total));
-        str = ['[Sort stack] Sorting backward (',num2str(pc),'%)'];
-        javaMethod('println',java.lang.System.out,str);
     end
 end
 

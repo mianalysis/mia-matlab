@@ -150,7 +150,7 @@
         <dependency>
             <groupId>wbif.sjx</groupId>
             <artifactId>MIA_</artifactId>
-            <version>0.15.19</version>
+            <version>0.15.5</version>
             <scope>${myscope}</scope>
             <!-- <groupId>com.github.SJCross</groupId>
             <artifactId>ModularImageAnalysis</artifactId>

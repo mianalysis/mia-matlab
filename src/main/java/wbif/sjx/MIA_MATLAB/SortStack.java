@@ -1,18 +1,14 @@
 package wbif.sjx.MIA_MATLAB;
 
-import com.drew.lang.annotations.Nullable;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
 import MIA_MATLAB_Core.StackSorter;
-import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
-import ij.process.ImageProcessor;
 import wbif.sjx.MIA.MIA;
 import wbif.sjx.MIA.Module.ModuleCollection;
 import wbif.sjx.MIA.Module.PackageNames;
-import wbif.sjx.MIA.Module.Deprecated.ChannelExtractor;
 import wbif.sjx.MIA.Module.ImageProcessing.Stack.ExtractSubstack;
 import wbif.sjx.MIA.Object.Image;
 import wbif.sjx.MIA.Object.Status;
@@ -21,8 +17,8 @@ import wbif.sjx.MIA.Object.Parameters.BooleanP;
 import wbif.sjx.MIA.Object.Parameters.ChoiceP;
 import wbif.sjx.MIA.Object.Parameters.InputImageP;
 import wbif.sjx.MIA.Object.Parameters.OutputImageP;
-import wbif.sjx.MIA.Object.Parameters.SeparatorP;
 import wbif.sjx.MIA.Object.Parameters.ParameterCollection;
+import wbif.sjx.MIA.Object.Parameters.SeparatorP;
 import wbif.sjx.MIA.Object.Parameters.Text.IntegerP;
 import wbif.sjx.MIA.Object.References.Collections.ImageMeasurementRefCollection;
 import wbif.sjx.MIA.Object.References.Collections.MetadataRefCollection;
@@ -42,6 +38,7 @@ public class SortStack extends CoreMATLABModule {
 
     public static final String SORT_SEPARATOR = "Sorting controls";
     public static final String SORT_AXIS = "Sort axis";
+    public static final String OTHER_AXIS_MODE = "Other axis mode";
     public static final String CALCULATION_SOURCE = "Calculation source";
     public static final String EXTERNAL_SOURCE = "External source";
     public static final String CALCULATION_CHANNEL = "Calculation channel";
@@ -51,6 +48,14 @@ public class SortStack extends CoreMATLABModule {
         String Z = "Z";
 
         String[] ALL = new String[] { TIME, Z };
+
+    }
+
+    public interface OtherAxisModes {
+        String INDEPENDENT = "Independent";
+        String LINKED = "Linked";
+
+        String[] ALL = new String[] { INDEPENDENT, LINKED };
 
     }
 
@@ -76,15 +81,82 @@ public class SortStack extends CoreMATLABModule {
         return "";
     }
 
-    boolean testReferenceValidity(Image referenceImage, String sortAxis, Image inputImage) {
+    public void processIndependent(Image inputImage, Image referenceImage, String sortAxis, int calculationChannel) {
+        // Verifying reference stack has the correct number of dimensions. If it isn't
+        // valid, skip sorting, but allow remaining modules to continue.
+        if (testReferenceValidity(referenceImage, sortAxis, inputImage, OtherAxisModes.INDEPENDENT)) {
+            // Getting non-sorting axis length
+            int nOther = getNonSortAxisLength(inputImage, sortAxis);
+
+            // Iterating over all non-sorting axis indices, applying the sorting
+            for (int i = 0; i < nOther; i++) {
+                // Convert reference image to MWArray
+                MWNumericArray referenceArray = getReferenceArrayIndependent(referenceImage, calculationChannel,
+                        sortAxis, i);
+
+                // Getting optimal stack order (this is different for the "other" axis)
+                int[] order = getStackOrder(referenceArray, isVerbose());
+                if (order == null) {
+                    MIA.log.writeWarning("Input stack has not been sorted");
+                    return;
+                }
+                reorderStack(inputImage, order, sortAxis, i);
+
+            }
+
+        } else {
+            MIA.log.writeWarning("Input stack has not been sorted");
+        }
+    }
+
+    public void processLinked(Image inputImage, Image referenceImage, String sortAxis, int calculationChannel) {
+        // Verifying reference stack has the correct number of dimensions. If it isn't
+        // valid, skip sorting, but allow remaining modules to continue.
+        if (testReferenceValidity(referenceImage, sortAxis, inputImage, OtherAxisModes.LINKED)) {
+            // Getting non-sorting axis length
+            int nOther = getNonSortAxisLength(inputImage, sortAxis);
+
+            // Convert reference image to MWArray
+            MWNumericArray referenceArray = getReferenceArrayLinked(referenceImage, calculationChannel);
+
+            // Getting optimal stack order (this is the same for the "other" axis)
+            int[] order = getStackOrder(referenceArray, isVerbose());
+            if (order == null) {
+                MIA.log.writeWarning("Input stack has not been sorted");
+                return;
+            }
+
+            // Iterating over all non-sorting axis indices, applying the sorting
+            for (int i = 0; i < nOther; i++)
+                reorderStack(inputImage, order, sortAxis, i);
+
+        } else {
+            MIA.log.writeWarning("Input stack has not been sorted");
+        }
+    }
+
+    int getNonSortAxisLength(Image inputImage, String sortAxis) {
+        switch (sortAxis) {
+            case SortAxes.TIME:
+                return inputImage.getImagePlus().getNSlices();
+            case SortAxes.Z:
+                return inputImage.getImagePlus().getNFrames();
+        }
+
+        return 0;
+
+    }
+
+    boolean testReferenceValidity(Image referenceImage, String sortAxis, Image inputImage, String otherAxisMode) {
         ImagePlus refIpl = referenceImage.getImagePlus();
         ImagePlus inputIpl = inputImage.getImagePlus();
 
         // Reference should have equal number of slices/frames as input in sorting
-        // dimension and be single valued in other dimension
+        // dimension and, if using the same alignment for all other frames/slices
+        // (respectively), be single valued in other dimension
         switch (sortAxis) {
             case SortAxes.TIME:
-                if (refIpl.getNSlices() > 1) {
+                if (otherAxisMode.equals(OtherAxisModes.LINKED) && refIpl.getNSlices() > 1) {
                     MIA.log.writeWarning("Reference stack has too many slices (" + refIpl.getNSlices()
                             + ") when sorting along time axis.  Reference stack should only have 1 slice.");
                     return false;
@@ -100,7 +172,7 @@ public class SortStack extends CoreMATLABModule {
                 break;
 
             case SortAxes.Z:
-                if (refIpl.getNFrames() > 1) {
+                if (otherAxisMode.equals(OtherAxisModes.LINKED) && refIpl.getNFrames() > 1) {
                     MIA.log.writeWarning("Reference stack has too many frames (" + refIpl.getNFrames()
                             + ") when sorting along Z axis.  Reference stack should only have 1 frame.");
                     return false;
@@ -121,19 +193,41 @@ public class SortStack extends CoreMATLABModule {
 
     }
 
-    MWNumericArray getReferenceArray(Image referenceImage, int calculationChannel) {
+    MWNumericArray getReferenceArrayLinked(Image referenceImage, int calculationChannel) {
         Image referenceChannel = ExtractSubstack.extractSubstack(referenceImage, "Reference",
-                String.valueOf(calculationChannel), "1-end", "1-end");
+                String.valueOf(calculationChannel+1), "1-end", "1-end");
 
         return imageStackToMW(referenceChannel.getImagePlus().getImageStack());
 
     }
 
-    int[] getStackOrder(MWNumericArray referenceArray) {
+    MWNumericArray getReferenceArrayIndependent(Image referenceImage, int calculationChannel, String sortAxis,
+            int otherAxisIdx) {
+        Image referenceChannel = null;
+        switch (sortAxis) {
+            case SortAxes.TIME:
+                referenceChannel = ExtractSubstack.extractSubstack(referenceImage, "Reference",
+                        String.valueOf(calculationChannel+1), String.valueOf(otherAxisIdx+1), "1-end");
+                break;
+
+            case SortAxes.Z:
+                referenceChannel = ExtractSubstack.extractSubstack(referenceImage, "Reference",
+                        String.valueOf(calculationChannel+1), "1-end", String.valueOf(otherAxisIdx+1));
+                break;
+        }
+
+        if (referenceChannel == null)
+            return null;
+
+        return imageStackToMW(referenceChannel.getImagePlus().getImageStack());
+
+    }
+
+    int[] getStackOrder(MWNumericArray referenceArray, boolean verbose) {
         try {
             // Getting optimised stack order
             StackSorter stackSorter = new StackSorter();
-            Object[] output = stackSorter.getOptimisedOrder(1, referenceArray, false);
+            Object[] output = stackSorter.getOptimisedOrder(1, referenceArray, verbose);
             stackSorter.dispose();
             referenceArray.dispose();
 
@@ -144,9 +238,8 @@ public class SortStack extends CoreMATLABModule {
             int[] data = orderArray.getIntData();
             int[] order = new int[nPoints];
 
-            for (int i = 0; i < nPoints; i++) {
+            for (int i = 0; i < nPoints; i++)
                 order[i] = data[indexer.getIndex(new int[] { i, 0 })];
-            }
 
             return order;
 
@@ -156,64 +249,55 @@ public class SortStack extends CoreMATLABModule {
         }
     }
 
-    void reorderStack(Image image, int[] order, String sortAxis) {
+    void reorderStack(Image image, int[] order, String sortAxis, int nonSortIdx) {
         switch (sortAxis) {
             case SortAxes.TIME:
-                reorderStackTime(image, order);
+                reorderStackTime(image, order, nonSortIdx);
                 break;
 
             case SortAxes.Z:
-                reorderStackZ(image, order);
+                reorderStackZ(image, order, nonSortIdx);
                 break;
         }
     }
 
-    void reorderStackTime(Image image, int[] order) {
+    void reorderStackTime(Image image, int[] order, int z) {
         // Iterating over all channels
         ImagePlus sourceIpl = image.getImagePlus().duplicate();
         ImagePlus targetIpl = image.getImagePlus();
 
         for (int c = 0; c < sourceIpl.getNChannels(); c++) {
-            for (int z = 0; z < sourceIpl.getNSlices(); z++) {
-                for (int t = 0; t < sourceIpl.getNFrames(); t++) {
-                    if (sourceIpl.isHyperStack())
-                        sourceIpl.setPosition(c + 1, z + 1, order[t]);
-                    else
-                        sourceIpl.setPosition(order[t]);
+            for (int t = 0; t < sourceIpl.getNFrames(); t++) {
+                if (sourceIpl.isHyperStack())
+                    sourceIpl.setPosition(c + 1, z + 1, order[t]);
+                else
+                    sourceIpl.setPosition(order[t]);
 
-                    if (targetIpl.isHyperStack())
-                        targetIpl.setPosition(c + 1, z + 1, t + 1);
-                    else
-                        targetIpl.setPosition(t + 1);
+                if (targetIpl.isHyperStack())
+                    targetIpl.setPosition(c + 1, z + 1, t + 1);
+                else
+                    targetIpl.setPosition(t + 1);
 
-                    targetIpl.setProcessor(sourceIpl.getProcessor());
+                targetIpl.setProcessor(sourceIpl.getProcessor());
 
-                }
             }
         }
     }
 
-    void reorderStackZ(Image image, int[] order) {
+    void reorderStackZ(Image image, int[] order, int t) {
         // Iterating over all channels
-        ImagePlus sourceIpl = image.getImagePlus().duplicate();
+        ImagePlus sourceIpl = image.getImagePlus();
+        ImageStack sourceIst = sourceIpl.getStack().duplicate();
         ImagePlus targetIpl = image.getImagePlus();
+        ImageStack targetIst = targetIpl.getStack();
 
         for (int c = 0; c < sourceIpl.getNChannels(); c++) {
             for (int z = 0; z < sourceIpl.getNSlices(); z++) {
-                for (int t = 0; t < sourceIpl.getNFrames(); t++) {
-                    if (sourceIpl.isHyperStack())
-                        sourceIpl.setPosition(c + 1, order[z], t + 1);
-                    else
-                        sourceIpl.setPosition(order[z]);
+                int sourceIdx = sourceIpl.getStackIndex(c + 1, order[z], t + 1);
+                int targetIdx = targetIpl.getStackIndex(c + 1, z + 1, t + 1);
 
-                    if (targetIpl.isHyperStack())
-                        targetIpl.setPosition(c + 1, z + 1, t + 1);
-                    else
-                        targetIpl.setPosition(z + 1);
+                targetIst.setProcessor(sourceIst.getProcessor(sourceIdx), targetIdx);
 
-                    targetIpl.setProcessor(sourceIpl.getProcessor());
-
-                }
             }
         }
     }
@@ -225,9 +309,13 @@ public class SortStack extends CoreMATLABModule {
         boolean applyToInput = parameters.getValue(APPLY_TO_INPUT);
         String outputImageName = parameters.getValue(OUTPUT_IMAGE);
         String sortAxis = parameters.getValue(SORT_AXIS);
+        String otherAxisMode = parameters.getValue(OTHER_AXIS_MODE);
         String calculationSource = parameters.getValue(CALCULATION_SOURCE);
         String externalSourceName = parameters.getValue(EXTERNAL_SOURCE);
         int calculationChannel = parameters.getValue(CALCULATION_CHANNEL);
+        
+        // Calculation channel is specified on the GUI with numbering starting at 1
+        calculationChannel--;
 
         Image inputImage = workspace.getImage(inputImageName);
 
@@ -241,22 +329,16 @@ public class SortStack extends CoreMATLABModule {
                 ? workspace.getImage(externalSourceName)
                 : inputImage;
 
-        // Verifying reference stack is only 3D. If it isn't valid, skip sorting, but
-        // all analysis to continue.
-        if (testReferenceValidity(referenceImage, sortAxis, inputImage)) {
-            // Convert reference image to MWArray
-            MWNumericArray referenceArray = getReferenceArray(referenceImage, calculationChannel);
+        // Process stacks depending on whether they will all have the same alignment in
+        // additional dimensions
+        switch (otherAxisMode) {
+            case OtherAxisModes.INDEPENDENT:
+                processIndependent(inputImage, referenceImage, sortAxis, calculationChannel);
+                break;
 
-            // Getting optimal stack order
-            int[] order = getStackOrder(referenceArray);
-            if (order == null)
-                return Status.FAIL;
-
-            // Applying order to stack
-            reorderStack(inputImage, order, sortAxis);
-
-        } else {
-            MIA.log.writeWarning("Input stack has not been sorted");
+            case OtherAxisModes.LINKED:
+                processLinked(inputImage, referenceImage, sortAxis, calculationChannel);
+                break;
         }
 
         if (!applyToInput)
@@ -278,6 +360,7 @@ public class SortStack extends CoreMATLABModule {
 
         parameters.add(new SeparatorP(SORT_SEPARATOR, this));
         parameters.add(new ChoiceP(SORT_AXIS, this, SortAxes.TIME, SortAxes.ALL));
+        parameters.add(new ChoiceP(OTHER_AXIS_MODE, this, OtherAxisModes.INDEPENDENT, OtherAxisModes.ALL));
         parameters.add(new ChoiceP(CALCULATION_SOURCE, this, CalculationSources.INTERNAL, CalculationSources.ALL));
         parameters.add(new InputImageP(EXTERNAL_SOURCE, this));
         parameters.add(new IntegerP(CALCULATION_CHANNEL, this, 1));
@@ -299,6 +382,7 @@ public class SortStack extends CoreMATLABModule {
 
         returnedParameters.add(parameters.getParameter(SORT_SEPARATOR));
         returnedParameters.add(parameters.getParameter(SORT_AXIS));
+        returnedParameters.add(parameters.getParameter(OTHER_AXIS_MODE));
         returnedParameters.add(parameters.getParameter(CALCULATION_SOURCE));
         switch ((String) parameters.getValue(CALCULATION_SOURCE)) {
             case CalculationSources.EXTERNAL:
