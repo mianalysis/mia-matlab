@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="724713115" file="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB.prj" location="F:\Java Projects\MIA_MATLAB\MATLAB" name="MIA_MATLAB" preferred-package-location="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
+  <configuration build-checksum="3482601587" file="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB.prj" location="F:\Java Projects\MIA_MATLAB\MATLAB" name="MIA_MATLAB" preferred-package-location="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
     <param.appname>MIA_MATLAB_Core</param.appname>
     <param.icon />
     <param.icons />
