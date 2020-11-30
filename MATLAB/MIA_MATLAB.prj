@@ -1,9 +1,9 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="2436488583" file="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB.prj" location="F:\Java Projects\MIA_MATLAB\MATLAB" name="MIA_MATLAB" preferred-package-location="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
+  <configuration build-checksum="3482601587" file="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB.prj" location="F:\Java Projects\MIA_MATLAB\MATLAB" name="MIA_MATLAB" preferred-package-location="F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
     <param.appname>MIA_MATLAB_Core</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.4</param.version>
+    <param.version>1.3</param.version>
     <param.authnamewatermark />
     <param.email />
     <param.company />
@@ -43,7 +43,7 @@
     <param.net.tsa.assembly />
     <param.net.tsa.interface />
     <param.net.tsa.namespace />
-    <param.net.tsa.superclass>AlphaShape</param.net.tsa.superclass>
+    <param.net.tsa.superclass>AlphaShapeFitter</param.net.tsa.superclass>
     <param.net.tsa.metadata />
     <param.net.tsa.metadata.assembly>F:\Java Projects\MIA_MATLAB\MATLAB</param.net.tsa.metadata.assembly>
     <param.net.saved.interface />
@@ -100,14 +100,18 @@
       <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface2D.m</file>
       <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface3D.m</file>
       <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurfaceAuto.m</file>
+      <file>${PROJECT_ROOT}\SortStack\getOptimisedOrder.m</file>
     </fileset.exports>
     <fileset.classes>
       <entity.package name="">
-        <entity.class name="AlphaShape">
+        <entity.class name="AlphaShapeFitter">
           <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface.m</file>
           <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface2D.m</file>
           <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurface3D.m</file>
           <file>${PROJECT_ROOT}\AlphaShape\fitAlphaSurfaceAuto.m</file>
+        </entity.class>
+        <entity.class name="StackSorter">
+          <file>${PROJECT_ROOT}\SortStack\getOptimisedOrder.m</file>
         </entity.class>
       </entity.package>
     </fileset.classes>
