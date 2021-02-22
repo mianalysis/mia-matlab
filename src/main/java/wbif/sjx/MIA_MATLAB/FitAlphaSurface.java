@@ -5,8 +5,9 @@ import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 
 import MIA_MATLAB_Core.AlphaShapeFitter;
+import wbif.sjx.MIA.Module.Categories;
+import wbif.sjx.MIA.Module.Category;
 import wbif.sjx.MIA.Module.ModuleCollection;
-import wbif.sjx.MIA.Module.PackageNames;
 import wbif.sjx.MIA.Object.Image;
 import wbif.sjx.MIA.Object.Measurement;
 import wbif.sjx.MIA.Object.Obj;
@@ -202,8 +203,8 @@ public class FitAlphaSurface extends CoreMATLABModule {
     }
 
     @Override
-    public String getPackageName() {
-        return PackageNames.OBJECT_MEASUREMENTS_SPATIAL;
+    public Category getCategory() {
+        return Categories.OBJECT_MEASUREMENTS_SPATIAL;
     }
 
     @Override
