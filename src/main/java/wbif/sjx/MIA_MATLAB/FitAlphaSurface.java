@@ -136,8 +136,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
 
     static Obj createAlphaSurfaceObject(ObjCollection outputObjects, Obj inputObject, MWNumericArray points) {
         // Converting the output into a series of Point<Integer> objects
-        Obj alphaShapeObject = new Obj(VolumeType.OCTREE, outputObjects.getName(), outputObjects.getAndIncrementID(),
-                inputObject);
+        Obj alphaShapeObject = new Obj(outputObjects, VolumeType.QUADTREE, outputObjects.getAndIncrementID());
         alphaShapeObject.setT(inputObject.getT());
         addPoints(points, alphaShapeObject);
 
