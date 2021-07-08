@@ -13,12 +13,11 @@ import wbif.sjx.MIA.Object.Measurement;
 import wbif.sjx.MIA.Object.Obj;
 import wbif.sjx.MIA.Object.ObjCollection;
 import wbif.sjx.MIA.Object.Status;
-import wbif.sjx.MIA.Object.Units;
 import wbif.sjx.MIA.Object.Workspace;
 import wbif.sjx.MIA.Object.Parameters.ChoiceP;
 import wbif.sjx.MIA.Object.Parameters.InputObjectsP;
-import wbif.sjx.MIA.Object.Parameters.SeparatorP;
 import wbif.sjx.MIA.Object.Parameters.ParameterCollection;
+import wbif.sjx.MIA.Object.Parameters.SeparatorP;
 import wbif.sjx.MIA.Object.Parameters.Objects.OutputObjectsP;
 import wbif.sjx.MIA.Object.Parameters.Text.DoubleP;
 import wbif.sjx.MIA.Object.References.ObjMeasurementRef;
@@ -28,6 +27,7 @@ import wbif.sjx.MIA.Object.References.Collections.MetadataRefCollection;
 import wbif.sjx.MIA.Object.References.Collections.ObjMeasurementRefCollection;
 import wbif.sjx.MIA.Object.References.Collections.ParentChildRefCollection;
 import wbif.sjx.MIA.Object.References.Collections.PartnerRefCollection;
+import wbif.sjx.MIA.Object.Units.SpatialUnit;
 import wbif.sjx.common.MathFunc.Indexer;
 import wbif.sjx.common.Object.Point;
 import wbif.sjx.common.Object.Volume.PointOutOfRangeException;
@@ -163,18 +163,18 @@ public class FitAlphaSurface extends CoreMATLABModule {
         double area = ((double[][]) results.get(idx + 1))[0][0];
         inputObject.addMeasurement(new Measurement(Measurements.AREA_PX, area));
         if (Double.isNaN(area)) {
-            inputObject.addMeasurement(new Measurement(Units.replace(Measurements.AREA_CAL), Double.NaN));
+            inputObject.addMeasurement(new Measurement(SpatialUnit.replace(Measurements.AREA_CAL), Double.NaN));
         } else {
-            inputObject.addMeasurement(new Measurement(Units.replace(Measurements.AREA_CAL), area * dppXY * dppXY));
+            inputObject.addMeasurement(new Measurement(SpatialUnit.replace(Measurements.AREA_CAL), area * dppXY * dppXY));
         }
 
         idx = results.fieldIndex("perimeter");
         double perimeter = ((double[][]) results.get(idx + 1))[0][0];
         inputObject.addMeasurement(new Measurement(Measurements.PERIMETER_PX, perimeter));
         if (Double.isNaN(perimeter)) {
-            inputObject.addMeasurement(new Measurement(Units.replace(Measurements.PERIMETER_CAL), Double.NaN));
+            inputObject.addMeasurement(new Measurement(SpatialUnit.replace(Measurements.PERIMETER_CAL), Double.NaN));
         } else {
-            inputObject.addMeasurement(new Measurement(Units.replace(Measurements.PERIMETER_CAL), perimeter * dppXY));
+            inputObject.addMeasurement(new Measurement(SpatialUnit.replace(Measurements.PERIMETER_CAL), perimeter * dppXY));
         }
     }
 
@@ -185,20 +185,20 @@ public class FitAlphaSurface extends CoreMATLABModule {
         double volume = ((double[][]) results.get(idx + 1))[0][0];
         inputObject.addMeasurement(new Measurement(Measurements.VOLUME_PX, volume));
         if (Double.isNaN(volume)) {
-            inputObject.addMeasurement(new Measurement(Units.replace(Measurements.VOLUME_CAL), Double.NaN));
+            inputObject.addMeasurement(new Measurement(SpatialUnit.replace(Measurements.VOLUME_CAL), Double.NaN));
         } else {
             inputObject.addMeasurement(
-                    new Measurement(Units.replace(Measurements.VOLUME_CAL), volume * dppXY * dppXY * dppXY));
+                    new Measurement(SpatialUnit.replace(Measurements.VOLUME_CAL), volume * dppXY * dppXY * dppXY));
         }
 
         idx = results.fieldIndex("surfaceArea");
         double surfaceArea = ((double[][]) results.get(idx + 1))[0][0];
         inputObject.addMeasurement(new Measurement(Measurements.SURFACE_AREA_PX, surfaceArea));
         if (Double.isNaN(surfaceArea)) {
-            inputObject.addMeasurement(new Measurement(Units.replace(Measurements.SURFACE_AREA_CAL), Double.NaN));
+            inputObject.addMeasurement(new Measurement(SpatialUnit.replace(Measurements.SURFACE_AREA_CAL), Double.NaN));
         } else {
             inputObject.addMeasurement(
-                    new Measurement(Units.replace(Measurements.SURFACE_AREA_CAL), surfaceArea * dppXY * dppXY));
+                    new Measurement(SpatialUnit.replace(Measurements.SURFACE_AREA_CAL), surfaceArea * dppXY * dppXY));
         }
     }
 
@@ -345,7 +345,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
                 measurementRef.setObjectsName(inputObjectsName);
                 returnedRefs.add(measurementRef);
 
-                measurementRef = objectMeasurementRefs.getOrPut(Units.replace(Measurements.AREA_CAL));
+                measurementRef = objectMeasurementRefs.getOrPut(SpatialUnit.replace(Measurements.AREA_CAL));
                 measurementRef.setObjectsName(inputObjectsName);
                 returnedRefs.add(measurementRef);
 
@@ -353,7 +353,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
                 measurementRef.setObjectsName(inputObjectsName);
                 returnedRefs.add(measurementRef);
 
-                measurementRef = objectMeasurementRefs.getOrPut(Units.replace(Measurements.PERIMETER_CAL));
+                measurementRef = objectMeasurementRefs.getOrPut(SpatialUnit.replace(Measurements.PERIMETER_CAL));
                 measurementRef.setObjectsName(inputObjectsName);
                 returnedRefs.add(measurementRef);
                 break;
@@ -363,7 +363,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
                 measurementRef.setObjectsName(inputObjectsName);
                 returnedRefs.add(measurementRef);
 
-                measurementRef = objectMeasurementRefs.getOrPut(Units.replace(Measurements.VOLUME_CAL));
+                measurementRef = objectMeasurementRefs.getOrPut(SpatialUnit.replace(Measurements.VOLUME_CAL));
                 measurementRef.setObjectsName(inputObjectsName);
                 returnedRefs.add(measurementRef);
 
@@ -371,7 +371,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
                 measurementRef.setObjectsName(inputObjectsName);
                 returnedRefs.add(measurementRef);
 
-                measurementRef = objectMeasurementRefs.getOrPut(Units.replace(Measurements.SURFACE_AREA_CAL));
+                measurementRef = objectMeasurementRefs.getOrPut(SpatialUnit.replace(Measurements.SURFACE_AREA_CAL));
                 measurementRef.setObjectsName(inputObjectsName);
                 returnedRefs.add(measurementRef);
                 break;
