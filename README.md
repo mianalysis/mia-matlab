@@ -2,7 +2,7 @@
 
 About MIA_MATLAB
 ------------------
-MIA_MATLAB is a [MIA](https://github.com/sjcross/MIA) plugin, which adds additional modules that rely on MATLAB.  The latest release includes the following modules:
+MIA_MATLAB is a [MIA](https://github.com/mianalysis/MIA) plugin, which adds additional modules that rely on MATLAB.  The latest release includes the following modules:
 - "Fit alpha shape" will create an [alpha shape](https://uk.mathworks.com/help/matlab/ref/alphashape.html) for each object in a specified object collection.
 - "Sort stack" will order slices of an image stack such that the difference in normalised cross-correlation between adjacent slices is minimised.
 
