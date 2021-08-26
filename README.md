@@ -8,7 +8,7 @@ MIA_MATLAB is a [MIA](https://github.com/sjcross/MIA) plugin, which adds additio
 
 Installation
 ------------
-1. Download the version of MIA_MATLAB, corresponding to your copy of MIA, from the [Releases](https://github.com/sjcross/MIA_MATLAB/releases) page.
+1. Download the version of MIA_MATLAB, corresponding to your copy of MIA, from the [Releases](https://github.com/mianalysis/MIA_MATLAB/releases) page.
 2. Place this .jar file into the /plugins directory of the your Fiji installation
 3. Install the relevant version of MATLAB (or the [MATLAB Compiler Runtime](https://uk.mathworks.com/products/compiler/matlab-runtime.html)).  Filenames for MIA_MATLAB indicate the version of MATLAB to use (e.g. 2018b).
 4. Copy the javabuilder.jar file from the installed MATLAB directory (e.g. C:\Program Files\MATLAB\2018b\toolbox\javabuilder\jar) to your Fiji's /jars directory.
@@ -23,4 +23,4 @@ This plugin relies on the [MATLAB Compiler Runtime](https://uk.mathworks.com/pro
 
 Note
 ----
-This plugin is still in development and test coverage is currently incomplete.  Please keep an eye on results and add an [issue](https://github.com/SJCross/MIA_MATLAB/issues) if any problems are encountered.
+This plugin is still in development and test coverage is currently incomplete.  Please keep an eye on results and add an [issue](https://github.com/mianalysis/MIA_MATLAB/issues) if any problems are encountered.
