@@ -3,12 +3,16 @@ package io.github.mianalysis.mia_matlab;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
+import org.scijava.Priority;
+import org.scijava.plugin.Plugin;
+
 import MIA_MATLAB_Core.StackSorter;
 import ij.ImagePlus;
 import ij.ImageStack;
 import io.github.mianalysis.mia.MIA;
 import io.github.mianalysis.mia.module.Categories;
 import io.github.mianalysis.mia.module.Category;
+import io.github.mianalysis.mia.module.Module;
 import io.github.mianalysis.mia.module.Modules;
 import io.github.mianalysis.mia.module.imageprocessing.stack.ExtractSubstack;
 import io.github.mianalysis.mia.object.Image;
@@ -31,6 +35,7 @@ import io.github.sjcross.common.mathfunc.Indexer;
 /**
  * Created by sc13967 on 30/06/2017.
  */
+@Plugin(type = Module.class, priority = Priority.LOW, visible = true)
 public class SortStack extends CoreMATLABModule {
     public static final String INPUT_SEPARATOR = "Image input/output";
     public static final String INPUT_IMAGE = "Input image";

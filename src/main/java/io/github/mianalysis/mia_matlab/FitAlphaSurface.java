@@ -4,9 +4,13 @@ import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 
+import org.scijava.Priority;
+import org.scijava.plugin.Plugin;
+
 import MIA_MATLAB_Core.AlphaShapeFitter;
 import io.github.mianalysis.mia.module.Categories;
 import io.github.mianalysis.mia.module.Category;
+import io.github.mianalysis.mia.module.Module;
 import io.github.mianalysis.mia.module.Modules;
 import io.github.mianalysis.mia.object.Image;
 import io.github.mianalysis.mia.object.Measurement;
@@ -34,6 +38,7 @@ import io.github.sjcross.common.object.volume.PointOutOfRangeException;
 import io.github.sjcross.common.object.volume.Volume;
 import io.github.sjcross.common.object.volume.VolumeType;
 
+@Plugin(type = Module.class, priority = Priority.LOW, visible = true)
 public class FitAlphaSurface extends CoreMATLABModule {
     public static final String INPUT_SEPARATOR = "Object input/output";
     public static final String INPUT_OBJECTS = "Input objects";
