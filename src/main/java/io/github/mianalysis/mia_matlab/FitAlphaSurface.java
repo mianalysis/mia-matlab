@@ -1,38 +1,38 @@
-package wbif.sjx.MIA_MATLAB;
+package io.github.mianalysis.mia_matlab;
 
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 
 import MIA_MATLAB_Core.AlphaShapeFitter;
-import wbif.sjx.MIA.Module.Categories;
-import wbif.sjx.MIA.Module.Category;
-import wbif.sjx.MIA.Module.ModuleCollection;
-import wbif.sjx.MIA.Object.Image;
-import wbif.sjx.MIA.Object.Measurement;
-import wbif.sjx.MIA.Object.Obj;
-import wbif.sjx.MIA.Object.ObjCollection;
-import wbif.sjx.MIA.Object.Status;
-import wbif.sjx.MIA.Object.Workspace;
-import wbif.sjx.MIA.Object.Parameters.ChoiceP;
-import wbif.sjx.MIA.Object.Parameters.InputObjectsP;
-import wbif.sjx.MIA.Object.Parameters.ParameterCollection;
-import wbif.sjx.MIA.Object.Parameters.SeparatorP;
-import wbif.sjx.MIA.Object.Parameters.Objects.OutputObjectsP;
-import wbif.sjx.MIA.Object.Parameters.Text.DoubleP;
-import wbif.sjx.MIA.Object.References.ObjMeasurementRef;
-import wbif.sjx.MIA.Object.References.ParentChildRef;
-import wbif.sjx.MIA.Object.References.Collections.ImageMeasurementRefCollection;
-import wbif.sjx.MIA.Object.References.Collections.MetadataRefCollection;
-import wbif.sjx.MIA.Object.References.Collections.ObjMeasurementRefCollection;
-import wbif.sjx.MIA.Object.References.Collections.ParentChildRefCollection;
-import wbif.sjx.MIA.Object.References.Collections.PartnerRefCollection;
-import wbif.sjx.MIA.Object.Units.SpatialUnit;
-import wbif.sjx.common.MathFunc.Indexer;
-import wbif.sjx.common.Object.Point;
-import wbif.sjx.common.Object.Volume.PointOutOfRangeException;
-import wbif.sjx.common.Object.Volume.Volume;
-import wbif.sjx.common.Object.Volume.VolumeType;
+import io.github.mianalysis.mia.module.Categories;
+import io.github.mianalysis.mia.module.Category;
+import io.github.mianalysis.mia.module.Modules;
+import io.github.mianalysis.mia.object.Image;
+import io.github.mianalysis.mia.object.Measurement;
+import io.github.mianalysis.mia.object.Obj;
+import io.github.mianalysis.mia.object.Objs;
+import io.github.mianalysis.mia.object.Status;
+import io.github.mianalysis.mia.object.Workspace;
+import io.github.mianalysis.mia.object.parameters.ChoiceP;
+import io.github.mianalysis.mia.object.parameters.InputObjectsP;
+import io.github.mianalysis.mia.object.parameters.Parameters;
+import io.github.mianalysis.mia.object.parameters.SeparatorP;
+import io.github.mianalysis.mia.object.parameters.objects.OutputObjectsP;
+import io.github.mianalysis.mia.object.parameters.text.DoubleP;
+import io.github.mianalysis.mia.object.refs.ObjMeasurementRef;
+import io.github.mianalysis.mia.object.refs.ParentChildRef;
+import io.github.mianalysis.mia.object.refs.collections.ImageMeasurementRefs;
+import io.github.mianalysis.mia.object.refs.collections.MetadataRefs;
+import io.github.mianalysis.mia.object.refs.collections.ObjMeasurementRefs;
+import io.github.mianalysis.mia.object.refs.collections.ParentChildRefs;
+import io.github.mianalysis.mia.object.refs.collections.PartnerRefs;
+import io.github.mianalysis.mia.object.units.SpatialUnit;
+import io.github.sjcross.common.mathfunc.Indexer;
+import io.github.sjcross.common.object.Point;
+import io.github.sjcross.common.object.volume.PointOutOfRangeException;
+import io.github.sjcross.common.object.volume.Volume;
+import io.github.sjcross.common.object.volume.VolumeType;
 
 public class FitAlphaSurface extends CoreMATLABModule {
     public static final String INPUT_SEPARATOR = "Object input/output";
@@ -43,7 +43,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
     public static final String ALPHA_RADIUS = "Alpha radius";
     public static final String MEASUREMENT_MODE = "Measurement mode";
 
-    public FitAlphaSurface(ModuleCollection modules) {
+    public FitAlphaSurface(Modules modules) {
         super("Fit alpha shape", modules);
     }
 
@@ -134,7 +134,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
         }
     }
 
-    static Obj createAlphaSurfaceObject(ObjCollection outputObjects, Obj inputObject, MWNumericArray points) {
+    static Obj createAlphaSurfaceObject(Objs outputObjects, Obj inputObject, MWNumericArray points) {
         // Converting the output into a series of Point<Integer> objects
         Obj alphaShapeObject = new Obj(outputObjects, VolumeType.QUADTREE, outputObjects.getAndIncrementID());
         alphaShapeObject.setT(inputObject.getT());
@@ -210,7 +210,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
     protected Status process(Workspace workspace) {
         // Getting input objects
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
-        ObjCollection inputObjects = workspace.getObjectSet(inputObjectsName);
+        Objs inputObjects = workspace.getObjectSet(inputObjectsName);
 
         // Getting parameters
         String outputObjectsName = parameters.getValue(OUTPUT_OBJECTS);
@@ -225,7 +225,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
         }
 
         // Creating a collection for the alpha shape objects
-        ObjCollection outputObjects = new ObjCollection(outputObjectsName, inputObjects);
+        Objs outputObjects = new Objs(outputObjectsName, inputObjects);
 
         // Processing each object
         int count = 0;
@@ -301,8 +301,8 @@ public class FitAlphaSurface extends CoreMATLABModule {
     }
 
     @Override
-    public ParameterCollection updateAndGetParameters() {
-        ParameterCollection returnedParameters = new ParameterCollection();
+    public Parameters updateAndGetParameters() {
+        Parameters returnedParameters = new Parameters();
 
         returnedParameters.add(parameters.getParameter(INPUT_SEPARATOR));
         returnedParameters.add(parameters.getParameter(INPUT_OBJECTS));
@@ -323,13 +323,13 @@ public class FitAlphaSurface extends CoreMATLABModule {
     }
 
     @Override
-    public ImageMeasurementRefCollection updateAndGetImageMeasurementRefs() {
+    public ImageMeasurementRefs updateAndGetImageMeasurementRefs() {
         return null;
     }
 
     @Override
-    public ObjMeasurementRefCollection updateAndGetObjectMeasurementRefs() {
-        ObjMeasurementRefCollection returnedRefs = new ObjMeasurementRefCollection();
+    public ObjMeasurementRefs updateAndGetObjectMeasurementRefs() {
+        ObjMeasurementRefs returnedRefs = new ObjMeasurementRefs();
 
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
         String measurementMode = parameters.getValue(MEASUREMENT_MODE);
@@ -381,13 +381,13 @@ public class FitAlphaSurface extends CoreMATLABModule {
     }
 
     @Override
-    public MetadataRefCollection updateAndGetMetadataReferences() {
+    public MetadataRefs updateAndGetMetadataReferences() {
         return null;
     }
 
     @Override
-    public ParentChildRefCollection updateAndGetParentChildRefs() {
-        ParentChildRefCollection returnedRefs = new ParentChildRefCollection();
+    public ParentChildRefs updateAndGetParentChildRefs() {
+        ParentChildRefs returnedRefs = new ParentChildRefs();
 
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
         String alphaShapeObjectsName = parameters.getValue(OUTPUT_OBJECTS);
@@ -400,7 +400,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
     }
 
     @Override
-    public PartnerRefCollection updateAndGetPartnerRefs() {
+    public PartnerRefs updateAndGetPartnerRefs() {
         return null;
     }
 

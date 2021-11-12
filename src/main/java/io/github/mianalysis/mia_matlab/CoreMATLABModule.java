@@ -1,17 +1,17 @@
-package wbif.sjx.MIA_MATLAB;
+package io.github.mianalysis.mia_matlab;
 
 import com.mathworks.toolbox.javabuilder.MWClassID;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
 import ij.ImageStack;
-import wbif.sjx.MIA.Module.Module;
-import wbif.sjx.MIA.Module.ModuleCollection;
-import wbif.sjx.common.Object.Point;
-import wbif.sjx.common.Object.Volume.Volume;
+import io.github.mianalysis.mia.module.Module;
+import io.github.mianalysis.mia.module.Modules;
+import io.github.sjcross.common.object.Point;
+import io.github.sjcross.common.object.volume.Volume;
 
 public abstract class CoreMATLABModule extends Module {
 
-    public CoreMATLABModule(String name, ModuleCollection modules) {
+    public CoreMATLABModule(String name, Modules modules) {
         super(name, modules);
     }
     
