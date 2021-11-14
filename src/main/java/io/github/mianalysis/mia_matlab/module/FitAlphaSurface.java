@@ -47,7 +47,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
     public static final String ALPHA_RADIUS_MODE = "Alpha radius mode";
     public static final String ALPHA_RADIUS = "Alpha radius";
     public static final String MEASUREMENT_MODE = "Measurement mode";
-
+    
     public FitAlphaSurface(Modules modules) {
         super("Fit alpha shape", modules);
     }
