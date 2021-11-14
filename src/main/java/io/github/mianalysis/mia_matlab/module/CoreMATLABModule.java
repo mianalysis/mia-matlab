@@ -1,4 +1,4 @@
-package io.github.mianalysis.mia_matlab;
+package io.github.mianalysis.mia_matlab.module;
 
 import com.mathworks.toolbox.javabuilder.MWClassID;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;

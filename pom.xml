@@ -2,19 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!--    <parent>-->
-    <!--        <groupId>org.scijava</groupId>-->
-    <!--        <artifactId>pom-scijava</artifactId>-->
-    <!--        <version>27.0.1</version>-->
-    <!--        <relativePath />-->
-    <!--    </parent>-->
+    <parent>
+        <groupId>org.scijava</groupId>
+        <artifactId>pom-scijava</artifactId>
+        <version>31.1.0</version>
+        <relativePath />
+    </parent>
 
-    <groupId>wbif.sjx</groupId>
+    <groupId>io.github.mianalysis</groupId>
     <artifactId>MIA_MATLAB</artifactId>
     <version>1.3.1</version>
     <packaging>jar</packaging>
     <name>MIA_MATLAB</name>
-    <url>https://github.com/SJCross/MIA_MATLAB</url>
+    <url>https://github.com/mianalysis/mia_matlab</url>
     <inceptionYear>2018</inceptionYear>
     <description>MATLAB functions for MIA plugin</description>
     <organization>
@@ -70,6 +70,7 @@
         <genClass>system</genClass>
         <license.licenseName>GNU General Public License v3+</license.licenseName>
         <license.copyrightOwners>Stephen Cross</license.copyrightOwners>
+        <enforcer.skip>true</enforcer.skip>
     </properties>
 
     <mailingLists>
@@ -80,10 +81,10 @@
     </mailingLists>
 
     <scm>
-        <connection>scm:git:git://github.com/SJCross/MIA_MATLAB</connection>
-        <developerConnection>scm:git:git@github.com:SJCross/MIA_MATLAB</developerConnection>
+        <connection>scm:git:git://github.com/mianalysis/MIA_MATLAB</connection>
+        <developerConnection>scm:git:git@github.com:mianalysis/MIA_MATLAB</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/SJCross/MIA_MATLAB</url>
+        <url>https://github.com/mianalysis/MIA_MATLAB</url>
     </scm>
 
     <ciManagement>
@@ -93,19 +94,13 @@
 
     <repositories>
         <repository>
-            <id>imagej.public</id>
-            <url>http://maven.imagej.net/content/groups/public</url>
+            <id>scijava.public</id>
+            <url>https://maven.scijava.org/content/groups/public</url>
         </repository>
 
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-
-        <repository>
-            <id>ome-web-prod.lifesci.dundee.ac.uk</id>
-            <name>ome-web-prod.lifesci.dundee.ac.uk-releases</name>
-            <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
         </repository>
     </repositories>
 
@@ -150,14 +145,14 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.mianalysis</groupId>
-            <artifactId>MIA</artifactId>
-            <version>v0.21.0</version>
-            <scope>${scp}</scope>
-            <!-- <groupId>com.github.mianalysis</groupId>
+            <!-- <groupId>io.github.mianalysis</groupId>
             <artifactId>MIA</artifactId>
             <version>v0.21.0</version>
             <scope>${scp}</scope> -->
+            <groupId>com.github.mianalysis</groupId>
+            <artifactId>MIA</artifactId>
+            <version>v0.21.0</version>
+            <scope>${scp}</scope>
         </dependency>
 
         <dependency>
@@ -177,22 +172,6 @@
 
     <build>
         <plugins>
-            <!-- <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <finalName>MIA_MATLAB-${project.version}</finalName>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <mainClass>io.github.mianalysis.mia_matlab.FitAlphaSurface</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin> -->
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -219,6 +198,22 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <finalName>MIA_MATLAB-${project.version}</finalName>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <mainClass>io.github.mianalysis.mia_matlab.module.FitAlphaSurface</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin> -->
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

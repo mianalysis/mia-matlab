@@ -141,7 +141,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/joml/joml/1.9.12/joml-1.9.12.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/ojalgo/ojalgo/45.1.1/ojalgo-45.1.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/gov/nist/math/jama/1.0.3/jama-1.0.3.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/io/github/mianalysis/MIA/v0.21.0/MIA-v0.21.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/github/mianalysis/MIA/v0.21.0/MIA-v0.21.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/maven/plugins/maven-project-info-reports-plugin/2.9/maven-project-info-reports-plugin-2.9.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/maven/reporting/maven-reporting-impl/2.3/maven-reporting-impl-2.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/maven/shared/maven-shared-utils/0.6/maven-shared-utils-0.6.jar" enabled="true" runInBatchMode="false"/>
