@@ -14,7 +14,7 @@ import io.github.mianalysis.mia.module.Categories;
 import io.github.mianalysis.mia.module.Category;
 import io.github.mianalysis.mia.module.Module;
 import io.github.mianalysis.mia.module.Modules;
-import io.github.mianalysis.mia.module.imageprocessing.stack.ExtractSubstack;
+import io.github.mianalysis.mia.module.images.transform.ExtractSubstack;
 import io.github.mianalysis.mia.object.Image;
 import io.github.mianalysis.mia.object.Status;
 import io.github.mianalysis.mia.object.Workspace;
@@ -79,7 +79,7 @@ public class SortStack extends CoreMATLABModule {
 
     @Override
     public Category getCategory() {
-        return Categories.IMAGE_PROCESSING_STACK;
+        return Categories.IMAGES_TRANSFORM;
     }
 
     @Override

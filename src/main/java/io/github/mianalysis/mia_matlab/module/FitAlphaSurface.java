@@ -208,7 +208,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
 
     @Override
     public Category getCategory() {
-        return Categories.OBJECT_MEASUREMENTS_SPATIAL;
+        return Categories.OBJECTS_MEASURE_SPATIAL;
     }
 
     @Override
