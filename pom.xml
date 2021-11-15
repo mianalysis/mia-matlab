@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
+    <!-- <parent>
         <groupId>org.scijava</groupId>
         <artifactId>pom-scijava</artifactId>
         <version>31.1.0</version>
         <relativePath />
-    </parent>
+    </parent> -->
 
     <groupId>io.github.mianalysis</groupId>
     <artifactId>MIA_MATLAB</artifactId>
@@ -70,7 +70,6 @@
         <genClass>system</genClass>
         <license.licenseName>GNU General Public License v3+</license.licenseName>
         <license.copyrightOwners>Stephen Cross</license.copyrightOwners>
-        <enforcer.skip>true</enforcer.skip>
     </properties>
 
     <mailingLists>
