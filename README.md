@@ -15,7 +15,7 @@ Installation
     - Linux: /usr/local/MATLAB/MATLAB_Runtime/v95/runtime/toolbox/javabuilder/jar
     - Mac: /Applications/MATLAB/MATLAB_Runtime/v95/runtime/toolbox/javabuilder/jar
     - Windows: C:\Program Files\MATLAB\MATLAB Runtime\v95\toolbox\javabuilder\jar
-5. (Linux and Mac only) Add the MATLAB Runtime to the relevant system path.  Details of this can be found [here](https://www.mathworks.com/help/compiler/mcr-path-settings-for-run-time-deployment.html)
+5. (Linux and Mac only) Add the MATLAB Runtime to the relevant system path.  Details of this can be found [here](https://www.mathworks.com/help/compiler/mcr-path-settings-for-run-time-deployment.html).
 
 Usage
 -----
