@@ -10,8 +10,12 @@ Installation
 ------------
 1. Download the version of MIA_MATLAB, corresponding to your copy of MIA, from the [Releases](https://github.com/mianalysis/MIA_MATLAB/releases) page.
 2. Place this .jar file into the /plugins directory of the your Fiji installation
-3. Install the relevant version of MATLAB (or the [MATLAB Compiler Runtime](https://uk.mathworks.com/products/compiler/matlab-runtime.html)).  Filenames for MIA_MATLAB indicate the version of MATLAB to use (e.g. 2018b).
-4. Copy the javabuilder.jar file from the installed MATLAB directory (e.g. C:\Program Files\MATLAB\2018b\toolbox\javabuilder\jar) to your Fiji's /jars directory.
+3. Install the relevant version of MATLAB (or the [MATLAB Runtime](https://uk.mathworks.com/products/compiler/matlab-runtime.html)).  Filenames for MIA_MATLAB indicate the version of MATLAB to use (e.g. 2018b).
+4. Copy the javabuilder.jar file from the installed MATLAB directory to your Fiji's /jars directory.  The javabuilder.jar file can typically be found at the following locations:
+    - Linux: /usr/local/MATLAB/MATLAB_Runtime/v95/runtime/toolbox/javabuilder/jar
+    - Mac: /Applications/MATLAB/MATLAB_Runtime/v95/runtime/toolbox/javabuilder/jar
+    - Windows: C:\Program Files\MATLAB\MATLAB Runtime\v95\toolbox\javabuilder\jar
+5. (Linux and Mac only) Add the MATLAB Runtime to the relevant system path.  Details of this can be found [here](https://www.mathworks.com/help/compiler/mcr-path-settings-for-run-time-deployment.html)
 
 Usage
 -----
@@ -19,7 +23,7 @@ MIA_MATLAB will add various modules to MIA (e.g. the ability to create alpha sur
 
 Acknowledgements
 ----------------
-This plugin relies on the [MATLAB Compiler Runtime](https://uk.mathworks.com/products/compiler/matlab-runtime.html) or a full copy of MATLAB if available.
+This plugin relies on the [MATLAB Runtime](https://uk.mathworks.com/products/compiler/matlab-runtime.html) or a full copy of MATLAB if available.
 
 Note
 ----
