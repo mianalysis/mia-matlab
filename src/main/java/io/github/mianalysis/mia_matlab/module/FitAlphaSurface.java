@@ -12,12 +12,12 @@ import io.github.mianalysis.mia.module.Categories;
 import io.github.mianalysis.mia.module.Category;
 import io.github.mianalysis.mia.module.Module;
 import io.github.mianalysis.mia.module.Modules;
-import io.github.mianalysis.mia.object.Image;
 import io.github.mianalysis.mia.object.Measurement;
 import io.github.mianalysis.mia.object.Obj;
 import io.github.mianalysis.mia.object.Objs;
-import io.github.mianalysis.mia.object.Status;
+import io.github.mianalysis.mia.object.system.Status;
 import io.github.mianalysis.mia.object.Workspace;
+import io.github.mianalysis.mia.object.image.Image;
 import io.github.mianalysis.mia.object.parameters.ChoiceP;
 import io.github.mianalysis.mia.object.parameters.InputObjectsP;
 import io.github.mianalysis.mia.object.parameters.Parameters;
@@ -214,14 +214,14 @@ public class FitAlphaSurface extends CoreMATLABModule {
     @Override
     protected Status process(Workspace workspace) {
         // Getting input objects
-        String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
+        String inputObjectsName = parameters.getValue(INPUT_OBJECTS,workspace);
         Objs inputObjects = workspace.getObjectSet(inputObjectsName);
 
         // Getting parameters
-        String outputObjectsName = parameters.getValue(OUTPUT_OBJECTS);
-        String alphaRadiusMode = parameters.getValue(ALPHA_RADIUS_MODE);
-        double alphaRadius = parameters.getValue(ALPHA_RADIUS);
-        String measurementMode = parameters.getValue(MEASUREMENT_MODE);
+        String outputObjectsName = parameters.getValue(OUTPUT_OBJECTS,workspace);
+        String alphaRadiusMode = parameters.getValue(ALPHA_RADIUS_MODE,workspace);
+        double alphaRadius = parameters.getValue(ALPHA_RADIUS,workspace);
+        String measurementMode = parameters.getValue(MEASUREMENT_MODE,workspace);
 
         switch (alphaRadiusMode) {
             case AlphaRadiusModes.AUTOMATIC:
@@ -307,6 +307,8 @@ public class FitAlphaSurface extends CoreMATLABModule {
 
     @Override
     public Parameters updateAndGetParameters() {
+        Workspace workspace = null;
+
         Parameters returnedParameters = new Parameters();
 
         returnedParameters.add(parameters.getParameter(INPUT_SEPARATOR));
@@ -315,7 +317,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
 
         returnedParameters.add(parameters.getParameter(ALPHA_SHAPE_SEPARATOR));
         returnedParameters.add(parameters.getParameter(ALPHA_RADIUS_MODE));
-        switch ((String) parameters.getValue(ALPHA_RADIUS_MODE)) {
+        switch ((String) parameters.getValue(ALPHA_RADIUS_MODE,workspace)) {
             case AlphaRadiusModes.MANUAL:
                 returnedParameters.add(parameters.getParameter(ALPHA_RADIUS));
                 break;
@@ -334,10 +336,11 @@ public class FitAlphaSurface extends CoreMATLABModule {
 
     @Override
     public ObjMeasurementRefs updateAndGetObjectMeasurementRefs() {
+        Workspace workspace = null;
         ObjMeasurementRefs returnedRefs = new ObjMeasurementRefs();
 
-        String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
-        String measurementMode = parameters.getValue(MEASUREMENT_MODE);
+        String inputObjectsName = parameters.getValue(INPUT_OBJECTS,workspace);
+        String measurementMode = parameters.getValue(MEASUREMENT_MODE,workspace);
 
         ObjMeasurementRef measurementRef = objectMeasurementRefs.getOrPut(Measurements.ALPHA_RADIUS);
         measurementRef.setObjectsName(inputObjectsName);
@@ -392,10 +395,12 @@ public class FitAlphaSurface extends CoreMATLABModule {
 
     @Override
     public ParentChildRefs updateAndGetParentChildRefs() {
+        Workspace workspace = null;
+
         ParentChildRefs returnedRefs = new ParentChildRefs();
 
-        String inputObjectsName = parameters.getValue(INPUT_OBJECTS);
-        String alphaShapeObjectsName = parameters.getValue(OUTPUT_OBJECTS);
+        String inputObjectsName = parameters.getValue(INPUT_OBJECTS,workspace);
+        String alphaShapeObjectsName = parameters.getValue(OUTPUT_OBJECTS,workspace);
 
         ParentChildRef ref = returnedRefs.getOrPut(inputObjectsName, alphaShapeObjectsName);
         returnedRefs.add(ref);

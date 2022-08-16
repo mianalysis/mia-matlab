@@ -1,10 +1,10 @@
 package io.github.mianalysis.mia_matlab.module;
 
-import com.mathworks.toolbox.javabuilder.MWException;
-import com.mathworks.toolbox.javabuilder.MWNumericArray;
-
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
+
+import com.mathworks.toolbox.javabuilder.MWException;
+import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
 import MIA_MATLAB_Core.StackSorter;
 import ij.ImagePlus;
@@ -15,9 +15,9 @@ import io.github.mianalysis.mia.module.Category;
 import io.github.mianalysis.mia.module.Module;
 import io.github.mianalysis.mia.module.Modules;
 import io.github.mianalysis.mia.module.images.transform.ExtractSubstack;
-import io.github.mianalysis.mia.object.Image;
-import io.github.mianalysis.mia.object.Status;
 import io.github.mianalysis.mia.object.Workspace;
+import io.github.mianalysis.mia.object.image.Image;
+import io.github.mianalysis.mia.object.image.ImageFactory;
 import io.github.mianalysis.mia.object.parameters.BooleanP;
 import io.github.mianalysis.mia.object.parameters.ChoiceP;
 import io.github.mianalysis.mia.object.parameters.InputImageP;
@@ -30,6 +30,7 @@ import io.github.mianalysis.mia.object.refs.collections.MetadataRefs;
 import io.github.mianalysis.mia.object.refs.collections.ObjMeasurementRefs;
 import io.github.mianalysis.mia.object.refs.collections.ParentChildRefs;
 import io.github.mianalysis.mia.object.refs.collections.PartnerRefs;
+import io.github.mianalysis.mia.object.system.Status;
 import io.github.sjcross.sjcommon.mathfunc.Indexer;
 
 /**
@@ -311,14 +312,14 @@ public class SortStack extends CoreMATLABModule {
     @Override
     public Status process(Workspace workspace) {
         // Getting input image
-        String inputImageName = parameters.getValue(INPUT_IMAGE);
-        boolean applyToInput = parameters.getValue(APPLY_TO_INPUT);
-        String outputImageName = parameters.getValue(OUTPUT_IMAGE);
-        String sortAxis = parameters.getValue(SORT_AXIS);
-        String otherAxisMode = parameters.getValue(OTHER_AXIS_MODE);
-        String calculationSource = parameters.getValue(CALCULATION_SOURCE);
-        String externalSourceName = parameters.getValue(EXTERNAL_SOURCE);
-        int calculationChannel = parameters.getValue(CALCULATION_CHANNEL);
+        String inputImageName = parameters.getValue(INPUT_IMAGE,workspace);
+        boolean applyToInput = parameters.getValue(APPLY_TO_INPUT,workspace);
+        String outputImageName = parameters.getValue(OUTPUT_IMAGE,workspace);
+        String sortAxis = parameters.getValue(SORT_AXIS,workspace);
+        String otherAxisMode = parameters.getValue(OTHER_AXIS_MODE,workspace);
+        String calculationSource = parameters.getValue(CALCULATION_SOURCE,workspace);
+        String externalSourceName = parameters.getValue(EXTERNAL_SOURCE,workspace);
+        int calculationChannel = parameters.getValue(CALCULATION_CHANNEL,workspace);
 
         // Calculation channel is specified on the GUI with numbering starting at 1
         calculationChannel--;
@@ -328,7 +329,7 @@ public class SortStack extends CoreMATLABModule {
         if (applyToInput)
             outputImageName = inputImageName;
         else
-            inputImage = new Image(outputImageName, inputImage.getImagePlus().duplicate());
+            inputImage = ImageFactory.createImage(outputImageName, inputImage.getImagePlus().duplicate());
 
         // Getting reference image
         Image referenceImage = calculationSource.equals(CalculationSources.EXTERNAL)
@@ -377,12 +378,13 @@ public class SortStack extends CoreMATLABModule {
 
     @Override
     public Parameters updateAndGetParameters() {
+        Workspace workspace = null;
         Parameters returnedParameters = new Parameters();
 
         returnedParameters.add(parameters.getParameter(INPUT_SEPARATOR));
         returnedParameters.add(parameters.getParameter(INPUT_IMAGE));
         returnedParameters.add(parameters.getParameter(APPLY_TO_INPUT));
-        if (!(boolean) parameters.getValue(APPLY_TO_INPUT)) {
+        if (!(boolean) parameters.getValue(APPLY_TO_INPUT,workspace)) {
             returnedParameters.add(parameters.getParameter(OUTPUT_IMAGE));
         }
 
@@ -390,7 +392,7 @@ public class SortStack extends CoreMATLABModule {
         returnedParameters.add(parameters.getParameter(SORT_AXIS));
         returnedParameters.add(parameters.getParameter(OTHER_AXIS_MODE));
         returnedParameters.add(parameters.getParameter(CALCULATION_SOURCE));
-        switch ((String) parameters.getValue(CALCULATION_SOURCE)) {
+        switch ((String) parameters.getValue(CALCULATION_SOURCE,workspace)) {
             case CalculationSources.EXTERNAL:
                 returnedParameters.add(parameters.getParameter(EXTERNAL_SOURCE));
                 break;

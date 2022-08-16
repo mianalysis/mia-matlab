@@ -11,7 +11,7 @@
 
     <groupId>io.github.mianalysis</groupId>
     <artifactId>MIA_MATLAB</artifactId>
-    <version>1.3.3</version>
+    <version>1.3.4</version>
     <packaging>jar</packaging>
     <name>MIA_MATLAB</name>
     <url>https://github.com/mianalysis/mia_matlab</url>
@@ -150,7 +150,7 @@
             <scope>${scp}</scope> -->
             <groupId>com.github.mianalysis</groupId>
             <artifactId>MIA</artifactId>
-            <version>v1.0.0</version>
+            <version>v1.1.0</version>
             <scope>${scp}</scope>
         </dependency>
 
