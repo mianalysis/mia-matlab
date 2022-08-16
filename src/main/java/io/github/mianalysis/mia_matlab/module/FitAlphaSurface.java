@@ -32,11 +32,11 @@ import io.github.mianalysis.mia.object.refs.collections.ObjMeasurementRefs;
 import io.github.mianalysis.mia.object.refs.collections.ParentChildRefs;
 import io.github.mianalysis.mia.object.refs.collections.PartnerRefs;
 import io.github.mianalysis.mia.object.units.SpatialUnit;
-import io.github.sjcross.common.mathfunc.Indexer;
-import io.github.sjcross.common.object.Point;
-import io.github.sjcross.common.object.volume.PointOutOfRangeException;
-import io.github.sjcross.common.object.volume.Volume;
-import io.github.sjcross.common.object.volume.VolumeType;
+import io.github.sjcross.sjcommon.mathfunc.Indexer;
+import io.github.sjcross.sjcommon.object.Point;
+import io.github.sjcross.sjcommon.object.volume.PointOutOfRangeException;
+import io.github.sjcross.sjcommon.object.volume.Volume;
+import io.github.sjcross.sjcommon.object.volume.VolumeType;
 
 @Plugin(type = Module.class, priority = Priority.LOW, visible = true)
 public class FitAlphaSurface extends CoreMATLABModule {

@@ -30,7 +30,7 @@ import io.github.mianalysis.mia.object.refs.collections.MetadataRefs;
 import io.github.mianalysis.mia.object.refs.collections.ObjMeasurementRefs;
 import io.github.mianalysis.mia.object.refs.collections.ParentChildRefs;
 import io.github.mianalysis.mia.object.refs.collections.PartnerRefs;
-import io.github.sjcross.common.mathfunc.Indexer;
+import io.github.sjcross.sjcommon.mathfunc.Indexer;
 
 /**
  * Created by sc13967 on 30/06/2017.
