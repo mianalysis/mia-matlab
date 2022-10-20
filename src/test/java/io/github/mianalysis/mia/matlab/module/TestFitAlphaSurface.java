@@ -1,9 +1,9 @@
-package io.github.mianalysis.mia_matlab.module;
+package io.github.mianalysis.mia.matlab.module;
 
 import static org.junit.Assert.assertNotNull;
 
 public class TestFitAlphaSurface {
-    public void testGetHelp() {
+    public void testGetHelp() {        
         assertNotNull(new FitAlphaSurface(null).getDescription());
     }
 }

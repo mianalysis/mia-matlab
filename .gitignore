@@ -7,5 +7,5 @@ target/site/*
 .idea/workspace\.xml
 .idea/libraries/
 
-MATLAB/MIA_MATLAB/*
+MATLAB/MIA-MATLAB/*
 

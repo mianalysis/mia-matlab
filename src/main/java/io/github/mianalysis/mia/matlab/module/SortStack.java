@@ -1,4 +1,4 @@
-package io.github.mianalysis.mia_matlab.module;
+package io.github.mianalysis.mia.matlab.module;
 
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
