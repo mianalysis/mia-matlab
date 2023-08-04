@@ -1,2 +1,0 @@
-{"class":"io.github.mianalysis.mia.matlab.module.FitAlphaSurface","values":{"priority":-100.0,"type":"io.github.mianalysis.mia.module.Module","visible":true}}
-{"class":"io.github.mianalysis.mia.matlab.module.SortStack","values":{"priority":-100.0,"type":"io.github.mianalysis.mia.module.Module","visible":true}}

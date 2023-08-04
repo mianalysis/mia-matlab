@@ -10,6 +10,7 @@ import MIA_MATLAB_Core.StackSorter;
 import ij.ImagePlus;
 import ij.ImageStack;
 import io.github.mianalysis.mia.MIA;
+import io.github.mianalysis.mia.module.AvailableModules;
 import io.github.mianalysis.mia.module.Categories;
 import io.github.mianalysis.mia.module.Category;
 import io.github.mianalysis.mia.module.Module;
@@ -32,6 +33,7 @@ import io.github.mianalysis.mia.object.refs.collections.ParentChildRefs;
 import io.github.mianalysis.mia.object.refs.collections.PartnerRefs;
 import io.github.mianalysis.mia.object.system.Status;
 import io.github.sjcross.sjcommon.mathfunc.Indexer;
+import net.imagej.ImageJ;
 
 /**
  * Created by sc13967 on 30/06/2017.
@@ -49,6 +51,18 @@ public class SortStack extends CoreMATLABModule {
     public static final String CALCULATION_SOURCE = "Calculation source";
     public static final String EXTERNAL_SOURCE = "External source";
     public static final String CALCULATION_CHANNEL = "Calculation channel";
+
+    public static void main(String[] args) {
+        // Creating a new instance of ImageJ
+        new ij.ImageJ();
+
+        // Launching MIA
+        new ImageJ ().command().run("io.github.mianalysis.mia.MIA", false);
+
+        // Adding the current module to MIA's list of available modules.
+        AvailableModules.addModuleName(SortStack.class);
+
+    }
 
     public interface SortAxes {
         String TIME = "Time";

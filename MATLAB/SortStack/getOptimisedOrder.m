@@ -11,7 +11,7 @@ nIm = size(stack,3);
 
 % Creating forward order
 if verbose
-    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Sort stack] Sorting forward (0%)');
+    javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,'Sorting forward (0%)','Sort stack');
 end
 
 % Creating a store for the slice order
@@ -23,21 +23,21 @@ total = ((nIm-1)*(nIm))/2;
 for i = 1:nIm
     idx = i+1:nIm;
     vals = zeros(1,numel(idx));
-    
+
     for j = i+1:nIm
         corr_im = normxcorr2(stack(:,:,i),stack(:,:,j));
         vals(j-i) = max(corr_im(:));
-        
+
         if verbose
             count = count + 1;
             pc = sprintf('%0.2f',(100*count/total));
-            str = ['[Sort stack] Sorting forward (',num2str(pc),'%)'];
-            javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,str);
+            str = ['Sorting forward (',num2str(pc),'%)'];
+            javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,str,'Sort stack');
         end
     end
-    
+
     max_pos = find(vals == max(vals),1);
-    
+
     if max_pos == 1
         % If the best fit was the one immediately after the current frame
         % we assume the current frame was already in the optimal position
@@ -60,7 +60,7 @@ ord = flip(ord,1);
 stack = flip(stack,3);
 
 if verbose
-    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Sort stack] Sorting backward (0%)');
+    javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,'Sorting backward (0%)','Sort stack');
 end
 
 count = 0;
@@ -68,21 +68,21 @@ ord(:,2) = 0;
 for i = 1:nIm
     idx = i+1:nIm;
     vals = zeros(1,numel(idx));
-    
+
     for j = i+1:nIm
         corr_im = normxcorr2(stack(:,:,i),stack(:,:,j));
         vals(j-i) = max(corr_im(:));
-        
+
         if verbose
             count = count + 1;
             pc = sprintf('%0.2f',(100*count/total));
-            str = ['[Sort stack] Sorting backward (',num2str(pc),'%)'];
-            javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,str);
+            str = ['Sorting backward (',num2str(pc),'%)'];
+            javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,str,'Sort stack');
         end
     end
-    
+
     max_pos = find(vals == max(vals),1);
-    
+
     if max_pos == 1
         % If the best fit was the one immediately after the current frame
         % we assume the current frame was already in the optimal position

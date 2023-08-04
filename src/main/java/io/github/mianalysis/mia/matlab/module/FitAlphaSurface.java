@@ -1,13 +1,14 @@
 package io.github.mianalysis.mia.matlab.module;
 
+import org.scijava.Priority;
+import org.scijava.plugin.Plugin;
+
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Plugin;
-
 import MIA_MATLAB_Core.AlphaShapeFitter;
+import io.github.mianalysis.mia.module.AvailableModules;
 import io.github.mianalysis.mia.module.Categories;
 import io.github.mianalysis.mia.module.Category;
 import io.github.mianalysis.mia.module.Module;
@@ -15,7 +16,6 @@ import io.github.mianalysis.mia.module.Modules;
 import io.github.mianalysis.mia.object.Measurement;
 import io.github.mianalysis.mia.object.Obj;
 import io.github.mianalysis.mia.object.Objs;
-import io.github.mianalysis.mia.object.system.Status;
 import io.github.mianalysis.mia.object.Workspace;
 import io.github.mianalysis.mia.object.image.Image;
 import io.github.mianalysis.mia.object.parameters.ChoiceP;
@@ -31,12 +31,14 @@ import io.github.mianalysis.mia.object.refs.collections.MetadataRefs;
 import io.github.mianalysis.mia.object.refs.collections.ObjMeasurementRefs;
 import io.github.mianalysis.mia.object.refs.collections.ParentChildRefs;
 import io.github.mianalysis.mia.object.refs.collections.PartnerRefs;
+import io.github.mianalysis.mia.object.system.Status;
 import io.github.mianalysis.mia.object.units.SpatialUnit;
 import io.github.sjcross.sjcommon.mathfunc.Indexer;
 import io.github.sjcross.sjcommon.object.Point;
 import io.github.sjcross.sjcommon.object.volume.PointOutOfRangeException;
 import io.github.sjcross.sjcommon.object.volume.Volume;
 import io.github.sjcross.sjcommon.object.volume.VolumeType;
+import net.imagej.ImageJ;
 
 @Plugin(type = Module.class, priority = Priority.LOW, visible = true)
 public class FitAlphaSurface extends CoreMATLABModule {
@@ -48,6 +50,18 @@ public class FitAlphaSurface extends CoreMATLABModule {
     public static final String ALPHA_RADIUS = "Alpha radius";
     public static final String MEASUREMENT_MODE = "Measurement mode";
     
+    public static void main(String[] args) {
+        // Creating a new instance of ImageJ
+        new ij.ImageJ();
+
+        // Launching MIA
+        new ImageJ ().command().run("io.github.mianalysis.mia.MIA", false);
+
+        // Adding the current module to MIA's list of available modules.
+        AvailableModules.addModuleName(FitAlphaSurface.class);
+
+    }
+
     public FitAlphaSurface(Modules modules) {
         super("Fit alpha shape", modules);
     }
