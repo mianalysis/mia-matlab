@@ -9,12 +9,17 @@ nIm = size(stack_in,3);
 max_corr = 0;
 max_corr_idx = -1;
 
+% javaMethod('writeStatus',io.github.mianalysis.mia.MIA.log,string(size(stack_in,1)));
+% javaMethod('writeStatus',io.github.mianalysis.mia.MIA.log,string(size(reference_slice,1)));
+% javaMethod('writeStatus',io.github.mianalysis.mia.MIA.log,string(size(stack_in,3)));
+% javaMethod('writeStatus',io.github.mianalysis.mia.MIA.log,string(size(reference_slice,3)));
+
 count = 0;
 total = ((nIm-1)*(nIm))/2;
 for i = 1:nIm
-    corr_im = normxcorr2(stack_in(:,:,i),reference_slice);
-    if corr_im > max_corr
-        max_corr = corr_im;
+    corr_im = normxcorr2(stack_in(:,:,i),reference_slice(:,:,1));
+    if max(corr_im(:)) > max_corr
+        max_corr = max(corr_im(:));
         max_corr_idx = i;
     end
 end
