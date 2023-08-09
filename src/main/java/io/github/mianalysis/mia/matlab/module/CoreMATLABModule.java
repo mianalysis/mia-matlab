@@ -6,8 +6,8 @@ import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import ij.ImageStack;
 import io.github.mianalysis.mia.module.Module;
 import io.github.mianalysis.mia.module.Modules;
-import io.github.sjcross.sjcommon.object.Point;
-import io.github.sjcross.sjcommon.object.volume.Volume;
+import io.github.mianalysis.mia.object.coordinates.Point;
+import io.github.mianalysis.mia.object.coordinates.volume.Volume;
 
 public abstract class CoreMATLABModule extends Module {
    

@@ -120,6 +120,8 @@ public class ZDriftCorrection extends CoreMATLABModule {
             return Status.FAIL;
         }
 
+        int count = 0;
+        int total = inputIpl.getNFrames();
         int[] bestSlices = new int[inputIpl.getNFrames()];
         Image substack = null;
         for (int t = 1; t <= inputIpl.getNFrames(); t++) {
@@ -153,13 +155,14 @@ public class ZDriftCorrection extends CoreMATLABModule {
             try {
                 Object[] output = stackMatcher.matchImageInStack(1, substackArray, refArray);
                 bestSlices[t - 1] = ((MWNumericArray) output[0]).getInt();
-                System.out.println(bestSlices[t - 1]);
             } catch (MWException e) {
                 MIA.log.writeError(e);
                 return Status.FAIL;
             }
 
             substackArray.dispose();
+
+            writeProgressStatus(++count, total, "frames");
 
         }
 
