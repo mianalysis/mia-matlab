@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-<!--    <parent>-->
-<!--        <groupId>org.scijava</groupId>-->
-<!--        <artifactId>pom-scijava</artifactId>-->
-<!--        <version>27.0.1</version>-->
-<!--        <relativePath />-->
-<!--    </parent>-->
-
-    <groupId>wbif.sjx</groupId>
-    <artifactId>MIA_MATLAB</artifactId>
-    <version>1.2.0</version>
+    <groupId>io.github.mianalysis</groupId>
+    <artifactId>mia-matlab</artifactId>
+    <version>1.3.5</version>
     <packaging>jar</packaging>
-    <name>MIA_MATLAB</name>
-    <url>https://github.com/SJCross/MIA_MATLAB</url>
+    <name>MIA-MATLAB</name>
+    <url>https://github.com/mianalysis/mia-matlab</url>
     <inceptionYear>2018</inceptionYear>
     <description>MATLAB functions for MIA plugin</description>
     <organization>
@@ -49,14 +40,18 @@
     <contributors>
         <contributor>
             <name>Stephen Cross</name>
-            <roles><role>founder</role></roles>
-            <properties><id>sjcross</id></properties>
+            <roles>
+                <role>founder</role>
+            </roles>
+            <properties>
+                <id>sjcross</id>
+            </properties>
         </contributor>
     </contributors>
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/SJCross/MIA_MATLAB/issues</url>
+        <url>https://github.com/SJCross/MIA-MATLAB/issues</url>
     </issueManagement>
 
     <properties>
@@ -78,10 +73,10 @@
     </mailingLists>
 
     <scm>
-        <connection>scm:git:git://github.com/SJCross/MIA_MATLAB</connection>
-        <developerConnection>scm:git:git@github.com:SJCross/MIA_MATLAB</developerConnection>
+        <connection>scm:git:git://github.com/mianalysis/MIA-MATLAB</connection>
+        <developerConnection>scm:git:git@github.com:mianalysis/MIA-MATLAB</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/SJCross/MIA_MATLAB</url>
+        <url>https://github.com/mianalysis/MIA-MATLAB</url>
     </scm>
 
     <ciManagement>
@@ -91,19 +86,13 @@
 
     <repositories>
         <repository>
-            <id>imagej.public</id>
-            <url>http://maven.imagej.net/content/groups/public</url>
+            <id>scijava.public</id>
+            <url>https://maven.scijava.org/content/groups/public</url>
         </repository>
 
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-
-        <repository>
-            <id>ome-web-prod.lifesci.dundee.ac.uk</id>
-            <name>ome-web-prod.lifesci.dundee.ac.uk-releases</name>
-            <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
         </repository>
     </repositories>
 
@@ -115,14 +104,20 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
+        <!-- <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
             <version>3.0.4</version>
             <scope>${scp}</scope>
-        </dependency>
+        </dependency> -->
 
         <dependency>
+            <groupId>net.imagej</groupId>
+            <artifactId>imagej</artifactId>
+            <version>2.14.0</version>
+            <scope>${scp}</scope>
+        </dependency>
+        <!-- <dependency>
             <groupId>net.imagej</groupId>
             <artifactId>imagej</artifactId>
             <version>2.0.0-rc-71</version>
@@ -145,23 +140,20 @@
             <artifactId>imagej-ops</artifactId>
             <version>0.45.0</version>
             <scope>${scp}</scope>
-        </dependency>
+        </dependency> -->
 
         <dependency>
-            <!-- <groupId>wbif.sjx</groupId>
-            <artifactId>MIA_</artifactId>
-            <version>0.15.7</version>
-            <scope>${scp}</scope> -->
-            <groupId>com.github.SJCross</groupId>
-            <artifactId>ModularImageAnalysis</artifactId>
-            <version>0.15.7</version>
+            <groupId>io.github.mianalysis</groupId>
+            <artifactId>mia</artifactId>
+            <version>1.3.0</version>
             <scope>${scp}</scope>
+            
         </dependency>
 
         <dependency>
             <groupId>wbif.sjx</groupId>
             <artifactId>MIA_MATLAB_Core</artifactId>
-            <version>1.3</version>
+            <version>1.4</version>
             <scope>compile</scope>
         </dependency>
 
@@ -177,41 +169,57 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.5</version>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
                         <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
                         <configuration>
-                            <finalName>MIA_MATLAB-${project.version}</finalName>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <archive>
-                                <manifest>
-                                    <mainClass>wbif.sjx.MIA_MATLAB.FitAlphaSurface</mainClass>
-                                </manifest>
-                            </archive>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <finalName>MIA_MATLAB-${project.version}</finalName>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <mainClass>io.github.mianalysis.mia_matlab.module.FitAlphaSurface</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin> -->
+
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                  <source>1.8</source>
-                  <target>1.8</target>
-                  <!-- Disable annotation processing for ourselves. -->
-                  <compilerArgument>-proc:none</compilerArgument>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArgument>-proc:none</compilerArgument>
                 </configuration>
-              </plugin>     
-            
+            </plugin>
+
         </plugins>
     </build>
 </project>

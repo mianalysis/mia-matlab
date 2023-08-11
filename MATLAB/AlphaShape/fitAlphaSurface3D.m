@@ -5,7 +5,7 @@ pts = double(pts)+1;
 
 % Fitting alpha shape
 if verbose
-    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Fitting alpha shape');
+    javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,'Fitting alpha shape','Fit alpha shape');
 end
 
 % Getting coordinate limits
@@ -26,7 +26,7 @@ end
 res.alpha = shp.Alpha;
 
 if verbose
-    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Fitting complete');
+    javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,'Fitting complete','Fit alpha shape');
 end
 
 % Testing if the alpha shape was formed correctly
@@ -36,7 +36,7 @@ if shp.volume == 0
 end
 
 if verbose
-    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Extracting internal points');
+    javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,'Extracting internal points','Fit alpha shape');
 end
 
 % Creating an array to hold logical values of which pixels are inside the
@@ -51,7 +51,7 @@ in_pts(:,2) = in_pts(:,2) + minY - 2;
 in_pts(:,3) = in_pts(:,3) + minZ - 2;
 
 if verbose
-    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Adding measurements');
+    javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,'Adding measurements','Fit alpha shape');
 end
 
 % Adding results
@@ -61,7 +61,7 @@ res.volume = shp.volume;
 res.surfaceArea = shp.surfaceArea;
 
 if verbose
-    javaMethod('writeStatus',wbif.sjx.MIA.MIA.log,'[Fit alpha shape] Fitting complete');
+    javaMethod('writeStatus',io.github.mianalysis.mia.module.Module,'Fitting complete','Fit alpha shape');
 end
 
 clear pts radius verbose xyzConversion inside minX maxX minY maxY minZ maxZ
