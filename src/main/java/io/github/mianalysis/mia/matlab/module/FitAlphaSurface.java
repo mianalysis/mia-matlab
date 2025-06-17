@@ -66,7 +66,7 @@ public class FitAlphaSurface extends CoreMATLABModule {
         try {
             new ij.ImageJ();
             new ImageJ().command().run("io.github.mianalysis.mia.MIA_", false);
-            AvailableModules.addModuleName(FitActiveContour.class);
+            AvailableModules.addModuleName(FitAlphaSurface.class);
 
         } catch (Exception e) {
             MIA.log.writeError(e);

@@ -36,6 +36,7 @@ import io.github.mianalysis.mia.object.refs.collections.ParentChildRefs;
 import io.github.mianalysis.mia.object.refs.collections.PartnerRefs;
 import io.github.mianalysis.mia.object.system.Status;
 import net.imagej.ImageJ;
+import net.imagej.patcher.LegacyInjector;
 
 @Plugin(type = Module.class, priority = Priority.LOW, visible = true)
 public class FitActiveContour extends CoreMATLABModule {
@@ -65,21 +66,27 @@ public class FitActiveContour extends CoreMATLABModule {
     public static final String INPUT_OBJECTS = "Input objects";
 
     /**
-     * This is the name with which the output contour objects will be stored in the workspace.
+     * This is the name with which the output contour objects will be stored in the
+     * workspace.
      */
     public static final String OUTPUT_OBJECTS = "Output objects";
 
     public static final String ACTIVE_CONTOUR_SEPARATOR = "Active contour controls";
 
     public static void main(String[] args) {
-        // Creating a new instance of ImageJ
-        new ij.ImageJ();
+        try {
+            LegacyInjector.preinit();
+        } catch (Exception e) {
+        }
 
-        // Launching MIA
-        new ImageJ().command().run("io.github.mianalysis.mia.MIA", false);
+        try {
+            new ij.ImageJ();
+            new ImageJ().command().run("io.github.mianalysis.mia.MIA_", false);
+            AvailableModules.addModuleName(FitActiveContour.class);
 
-        // Adding the current module to MIA's list of available modules.
-        AvailableModules.addModuleName(FitActiveContour.class);
+        } catch (Exception e) {
+            MIA.log.writeError(e);
+        }
 
     }
 
@@ -141,7 +148,7 @@ public class FitActiveContour extends CoreMATLABModule {
             fitter = new ActiveContourFitter();
         } catch (MWException e) {
             MIA.log.writeError(e);
-                    return Status.FAIL;
+            return Status.FAIL;
         }
 
         // Iterating over all objects
@@ -156,7 +163,8 @@ public class FitActiveContour extends CoreMATLABModule {
 
             for (int z = zMin; z <= zMax; z++) {
                 ImagePlus objectIpl = getSliceImage(inputObject, z);
-                ImagePlus imageIpl = ExtractSubstack.extractSubstack(inputImage, "Image slice", "1", String.valueOf(z+1), String.valueOf(inputObject.getT()+1)).getImagePlus();
+                ImagePlus imageIpl = ExtractSubstack.extractSubstack(inputImage, "Image slice", "1",
+                        String.valueOf(z + 1), String.valueOf(inputObject.getT() + 1)).getImagePlus();
 
                 MWNumericArray objectMW = imageStackToMW(objectIpl.getStack());
                 MWNumericArray imageMW = imageStackToMW(imageIpl.getStack());
@@ -181,8 +189,8 @@ public class FitActiveContour extends CoreMATLABModule {
         inputImagePlus.setPosition(1, 1, 1);
 
         if (showOutput)
-                outputObjects.convertToImageIDColours().show(false);
-        
+            outputObjects.convertToImageIDColours().show(false);
+
         workspace.addObjects(outputObjects);
 
         return Status.PASS;
@@ -214,7 +222,7 @@ public class FitActiveContour extends CoreMATLABModule {
 
         returnedParameters.add(parameters.getParameter(OBJECTS_SEPARATOR));
         returnedParameters.add(parameters.getParameter(INPUT_OBJECTS));
-            returnedParameters.add(parameters.getParameter(OUTPUT_OBJECTS));
+        returnedParameters.add(parameters.getParameter(OUTPUT_OBJECTS));
 
         returnedParameters.add(parameters.getParameter(ACTIVE_CONTOUR_SEPARATOR));
 
@@ -276,7 +284,8 @@ public class FitActiveContour extends CoreMATLABModule {
         parameters.get(INPUT_OBJECTS).setDescription(
                 "Objects from the workspace to which active contours will be fit.  Active contours are fit in 2D to the object points from the first slice.  As such, input objects can be stored in 3D space, but only a single slice will be fit.");
 
-        parameters.get(OUTPUT_OBJECTS).setDescription("This is the name with which the output contour objects will be stored in the workspace.");
+        parameters.get(OUTPUT_OBJECTS).setDescription(
+                "This is the name with which the output contour objects will be stored in the workspace.");
 
     }
 
