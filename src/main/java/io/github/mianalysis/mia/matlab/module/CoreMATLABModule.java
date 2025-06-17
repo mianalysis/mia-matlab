@@ -1,6 +1,7 @@
 package io.github.mianalysis.mia.matlab.module;
 
 import com.mathworks.toolbox.javabuilder.MWClassID;
+import com.mathworks.toolbox.javabuilder.MWLogicalArray;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
 import ij.ImageStack;
@@ -45,6 +46,25 @@ public abstract class CoreMATLABModule extends Module {
         }
 
         return new MWNumericArray(imageArray, MWClassID.DOUBLE);
+        
+    }
+
+    public static MWLogicalArray imageStackToLogicalMW(ImageStack ist) {
+        int w = ist.getWidth();
+        int h = ist.getHeight();
+        int nZ = ist.getSize();
+
+        double[][][] imageArray = new double[w][h][nZ];
+
+        for (int z = 0; z < nZ; z++) {
+            for (int x = 0; x < w; x++) {
+                for (int y = 0; y < h; y++) {
+                    imageArray[x][y][z] = ist.getVoxel(x, y, z);
+                }
+            }
+        }
+
+        return new MWLogicalArray(imageArray);
         
     }
 }

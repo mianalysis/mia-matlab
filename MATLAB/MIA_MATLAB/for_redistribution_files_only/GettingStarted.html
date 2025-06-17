@@ -30,13 +30,13 @@
                 <div  class = 'S1'><span></span></div>
             <h2  class = 'S2'><span>Compiling a Java Driver Application</span></h2>
                 <div  class = 'S1'><span>At the system terminal, type:</span></div>
-                <div  class = 'code'><pre>javac -cp MIA_MATLAB_Core.jar:%MATLAB_RUNTIME_INSTALL_LOCATION%/toolbox/javabuilder/jar/maci64/javabuilder.jar driverApplication.java</pre></div>
+                <div  class = 'code'><pre>javac -cp MIA_MATLAB_Core.jar;%MATLAB_RUNTIME_INSTALL_LOCATION%/toolbox/javabuilder/jar/win64/javabuilder.jar driverApplication.java</pre></div>
                 <div  class = 'S1'><span>Replace %MATLAB_RUNTIME_INSTALL_LOCATION% with the installation folder for MATLAB Runtime.</span></div>
                 <div  class = 'S1'><span>Note: You will need write permissions to the folder where you are compiling your driver application. If you do not have write permissions, copy the sample and generated component to a folder with write permissions, and then compile your driver application.</span></div>
                 <div  class = 'S1'><span></span></div>
             <h2  class = 'S2'><span>Executing a Java Driver Application</span></h2>
                 <div  class = 'S1'><span>At the system terminal, type:</span></div>
-                <div  class = 'code'><pre>java -cp .:MIA_MATLAB_Core.jar:%MATLAB_RUNTIME_INSTALL_LOCATION%/toolbox/javabuilder/jar/maci64/javabuilder.jar driverApplication</pre></div>
+                <div  class = 'code'><pre>java -cp .;MIA_MATLAB_Core.jar;%MATLAB_RUNTIME_INSTALL_LOCATION%/toolbox/javabuilder/jar/win64/javabuilder.jar driverApplication</pre></div>
                 <div  class = 'S1'><span>Replace %MATLAB_RUNTIME_INSTALL_LOCATION% with the installation folder for MATLAB Runtime.</span></div>
                 <div  class = 'S1'><span></span></div>
             <h2  class = 'S2'><span>Additional Resources</span></h2>

@@ -11,7 +11,7 @@ To find its location, enter
 at the MATLAB prompt.
 NOTE: You will need administrator rights to run the MATLAB Runtime installer. 
 
-Alternatively, download and install the Macintosh version of the MATLAB Runtime for R2023a 
+Alternatively, download and install the Windows version of the MATLAB Runtime for R2023a 
 from the following link on the MathWorks website:
 
     https://www.mathworks.com/products/compiler/mcr/index.html
@@ -27,7 +27,7 @@ in the MathWorks Documentation Center.
 - javabuilder.jar must be included in your CLASSPATH. javabuilder.jar 
   can be found at: 
   
-  <mcr_root>/toolbox/javabuilder/jar/javabuilder.jar
+  <mcr_root>\toolbox\javabuilder\jar\javabuilder.jar
 
   where <mcr_root> represents the directory where MATLAB or the MATLAB Runtime is 
   installed on the target machine. 
@@ -35,7 +35,7 @@ in the MathWorks Documentation Center.
 2. Files to Deploy and Package
 
 -MIA_MATLAB_Core.jar
--MCRInstaller.zip 
+-MCRInstaller.exe 
     Note: if end users are unable to download the MATLAB Runtime using the
     instructions in the previous section, include it when building your 
     component by clicking the "Runtime included in package" link in the
@@ -62,18 +62,6 @@ Center.
 
 5. Appendix 
 
-In the following directions, replace MR/R2023a by the directory on the target machine 
-   where MATLAB is installed, or MR by the directory where the MATLAB Runtime is 
-   installed.
-
-If the environment variable DYLD_LIBRARY_PATH is undefined, set it to the following 
-   string:
-
-MR/R2023a/runtime/maci64:MR/R2023a/sys/os/maci64:MR/R2023a/bin/maci64
-
-If it is defined, set it to the following:
-
-${DYLD_LIBRARY_PATH}:MR/R2023a/runtime/maci64:MR/R2023a/sys/os/maci64:MR/R2023a/bin/maci64
 
    For more detailed information about setting the MATLAB Runtime paths, see Package and 
    Distribute in the MATLAB Compiler SDK documentation in the MathWorks Documentation 

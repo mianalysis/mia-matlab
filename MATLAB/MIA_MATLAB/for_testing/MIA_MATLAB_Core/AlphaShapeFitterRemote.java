@@ -1,8 +1,17 @@
 /*
  * MATLAB Compiler: 8.6 (R2023a)
- * Date: Tue Jun 17 13:00:40 2025
+ * Date: Tue Jun 17 14:02:41 2025
  * Arguments: 
- * "-B""macro_default""-W""java:MIA_MATLAB_Core,AlphaShapeFitter""-T""link:lib""-d""/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/MIA_MATLAB/for_testing""class{AlphaShapeFitter:/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface.m,/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface2D.m,/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface3D.m,/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurfaceAuto.m,/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/StackMatcher/matchImageInStack.m}""class{StackSorter:/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/SortStack/getOptimisedOrder.m}""class{StackMatcher:/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/StackMatcher/matchImageInStack.m}""class{ActiveContourFitter:/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/ActiveContours/fitActiveContour.m}"
+ * "-B""macro_default""-W""java:MIA_MATLAB_Core,AlphaShapeFitter""-T""link:lib""-d""F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\MIA_MATLAB\\for_testing""class{AlphaShapeFitter:F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface.m,F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface2D.m,F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface3D.m,F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurfaceAuto.m,F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\StackMatcher\\matchImageInStack.m}""class{StackSorter:F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\SortStack\\getOptimisedOrder.m}""class{StackMatcher:F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\StackMatcher\\matchImageInStack.m}""class{ActiveContourFitter:F:\\Java 
+ * Projects\\mia-matlab\\MATLAB\\ActiveContours\\fitActiveContour.m}"
  */
 
 package MIA_MATLAB_Core;
@@ -16,11 +25,11 @@ import java.rmi.RemoteException;
  * The <code>AlphaShapeFitterRemote</code> class provides a Java RMI-compliant interface 
  * to MATLAB functions. The interface is compiled from the following files:
  * <pre>
- *  /Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface.m
- *  /Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface2D.m
- *  /Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface3D.m
- *  /Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurfaceAuto.m
- *  /Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/StackMatcher/matchImageInStack.m
+ *  F:\\Java Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface.m
+ *  F:\\Java Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface2D.m
+ *  F:\\Java Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface3D.m
+ *  F:\\Java Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurfaceAuto.m
+ *  F:\\Java Projects\\mia-matlab\\MATLAB\\StackMatcher\\matchImageInStack.m
  * </pre>
  * The {@link #dispose} method <b>must</b> be called on a 
  * <code>AlphaShapeFitterRemote</code> instance when it is no longer needed to ensure 

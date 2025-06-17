@@ -4,6 +4,7 @@ import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 
 import com.mathworks.toolbox.javabuilder.MWException;
+import com.mathworks.toolbox.javabuilder.MWLogicalArray;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
 import MIA_MATLAB_Core.ActiveContourFitter;
@@ -21,12 +22,17 @@ import io.github.mianalysis.mia.object.Obj;
 import io.github.mianalysis.mia.object.Objs;
 import io.github.mianalysis.mia.object.Workspace;
 import io.github.mianalysis.mia.object.coordinates.Point;
+import io.github.mianalysis.mia.object.coordinates.volume.PointOutOfRangeException;
+import io.github.mianalysis.mia.object.coordinates.volume.VolumeType;
 import io.github.mianalysis.mia.object.image.Image;
+import io.github.mianalysis.mia.object.parameters.ChoiceP;
 import io.github.mianalysis.mia.object.parameters.InputImageP;
 import io.github.mianalysis.mia.object.parameters.InputObjectsP;
 import io.github.mianalysis.mia.object.parameters.Parameters;
 import io.github.mianalysis.mia.object.parameters.SeparatorP;
 import io.github.mianalysis.mia.object.parameters.objects.OutputObjectsP;
+import io.github.mianalysis.mia.object.parameters.text.DoubleP;
+import io.github.mianalysis.mia.object.parameters.text.IntegerP;
 import io.github.mianalysis.mia.object.refs.ParentChildRef;
 import io.github.mianalysis.mia.object.refs.collections.ImageMeasurementRefs;
 import io.github.mianalysis.mia.object.refs.collections.MetadataRefs;
@@ -73,6 +79,23 @@ public class FitActiveContour extends CoreMATLABModule {
 
     public static final String ACTIVE_CONTOUR_SEPARATOR = "Active contour controls";
 
+    public static final String NUM_ITERATIONS = "Number of iterations";
+
+    public static final String METHOD = "Method";
+
+    public static final String SMOOTHING_FACTOR = "Smoothing factor";
+
+    public static final String CONTRACTION_BIAS = "Contraction bias";
+
+    public interface Methods {
+        String CHAN_VESE = "Chan-Vese";
+        String EDGE = "Edge";
+
+        String[] ALL = new String[]{CHAN_VESE, EDGE};
+   
+    }
+
+
     public static void main(String[] args) {
         try {
             LegacyInjector.preinit();
@@ -91,7 +114,7 @@ public class FitActiveContour extends CoreMATLABModule {
     }
 
     public FitActiveContour(Modules modules) {
-        super("Fit active contour", modules);
+        super("Fit active contours (MATLAB)", modules);
     }
 
     @Override
@@ -106,7 +129,7 @@ public class FitActiveContour extends CoreMATLABModule {
 
     @Override
     public Category getCategory() {
-        return Categories.OBJECTS_MEASURE_SPATIAL;
+        return Categories.OBJECTS_PROCESS;
     }
 
     public static ImagePlus getSliceImage(Obj inputObject, int slice) {
@@ -127,7 +150,6 @@ public class FitActiveContour extends CoreMATLABModule {
         // Getting input image
         String inputImageName = parameters.getValue(INPUT_IMAGE, workspace);
         Image inputImage = workspace.getImage(inputImageName);
-        ImagePlus inputImagePlus = inputImage.getImagePlus();
 
         // Getting input objects
         String inputObjectsName = parameters.getValue(INPUT_OBJECTS, workspace);
@@ -136,6 +158,12 @@ public class FitActiveContour extends CoreMATLABModule {
         // Getting output image name
         String outputObjectsName = parameters.getValue(OUTPUT_OBJECTS, workspace);
         Objs outputObjects = new Objs(outputObjectsName, inputObjects);
+
+        // Getting parameters
+        int numIterations = parameters.getValue(NUM_ITERATIONS, workspace);
+        String method = parameters.getValue(METHOD, workspace);
+        double smoothingFactor = parameters.getValue(SMOOTHING_FACTOR, workspace);
+        double contractionBias = parameters.getValue(CONTRACTION_BIAS, workspace);
 
         // If there are no input objects, creating an empty collection
         if (inputObjects.getFirst() == null) {
@@ -156,6 +184,12 @@ public class FitActiveContour extends CoreMATLABModule {
         int total = inputObjects.size();
 
         for (Obj inputObject : inputObjects.values()) {
+            // Creating output object
+            Obj outputObject = outputObjects.createAndAddNewObject(VolumeType.QUADTREE);
+            outputObject.setT(inputObject.getT());
+            inputObject.addChild(outputObject);
+            outputObject.addParent(inputObject);
+
             // Iterating over each slice of the input object
             double[][] extents = inputObject.getExtents(true, false);
             int zMin = (int) Math.round(extents[2][0]);
@@ -166,27 +200,35 @@ public class FitActiveContour extends CoreMATLABModule {
                 ImagePlus imageIpl = ExtractSubstack.extractSubstack(inputImage, "Image slice", "1",
                         String.valueOf(z + 1), String.valueOf(inputObject.getT() + 1)).getImagePlus();
 
-                MWNumericArray objectMW = imageStackToMW(objectIpl.getStack());
+                MWLogicalArray objectMW = imageStackToLogicalMW(objectIpl.getStack());
                 MWNumericArray imageMW = imageStackToMW(imageIpl.getStack());
 
                 Object[] output;
                 try {
-                    output = fitter.fitActiveContour(1, imageMW, objectMW, 100, "Chan-Vese", 0, 0, true);
+                    output = fitter.fitActiveContour(1, imageMW, objectMW, numIterations, method, smoothingFactor, contractionBias);
                 } catch (MWException e) {
                     MIA.log.writeError(e);
                     return Status.FAIL;
                 }
 
-                MIA.log.writeDebug(output[0]);
+                MWLogicalArray contourMW = (MWLogicalArray) output[0];
+
+                for (int row = 1; row <= contourMW.getDimensions()[0]; row++) {
+                    for (int col = 1; col <= contourMW.getDimensions()[1]; col++) {
+                        if ((Boolean) contourMW.get(new int[]{row, col}))
+                            try {
+                                outputObject.add(row-1, col-1, z);
+                            } catch (PointOutOfRangeException e) {
+                            }
+                                                    
+                    }
+                }
 
             }
 
             writeProgressStatus(count++, total, "objects");
 
         }
-
-        // Resetting the image position
-        inputImagePlus.setPosition(1, 1, 1);
 
         if (showOutput)
             outputObjects.convertToImageIDColours().show(false);
@@ -207,6 +249,10 @@ public class FitActiveContour extends CoreMATLABModule {
         parameters.add(new OutputObjectsP(OUTPUT_OBJECTS, this));
 
         parameters.add(new SeparatorP(ACTIVE_CONTOUR_SEPARATOR, this));
+        parameters.add(new IntegerP(NUM_ITERATIONS, this, 100));
+        parameters.add(new ChoiceP(METHOD, this, Methods.CHAN_VESE, Methods.ALL));
+        parameters.add(new DoubleP(SMOOTHING_FACTOR, this, 0));
+        parameters.add(new DoubleP(CONTRACTION_BIAS, this, 0));
 
         addParameterDescriptions();
 
@@ -214,7 +260,6 @@ public class FitActiveContour extends CoreMATLABModule {
 
     @Override
     public Parameters updateAndGetParameters() {
-        Workspace workspace = null;
         Parameters returnedParameters = new Parameters();
 
         returnedParameters.add(parameters.getParameter(IMAGE_SEPARATOR));
@@ -225,6 +270,10 @@ public class FitActiveContour extends CoreMATLABModule {
         returnedParameters.add(parameters.getParameter(OUTPUT_OBJECTS));
 
         returnedParameters.add(parameters.getParameter(ACTIVE_CONTOUR_SEPARATOR));
+        returnedParameters.add(parameters.getParameter(NUM_ITERATIONS));
+        returnedParameters.add(parameters.getParameter(METHOD));
+        returnedParameters.add(parameters.getParameter(SMOOTHING_FACTOR));
+        returnedParameters.add(parameters.getParameter(CONTRACTION_BIAS));
 
         return returnedParameters;
 
