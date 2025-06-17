@@ -8,6 +8,7 @@ import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 
 import MIA_MATLAB_Core.AlphaShapeFitter;
+import io.github.mianalysis.mia.MIA;
 import io.github.mianalysis.mia.module.AvailableModules;
 import io.github.mianalysis.mia.module.Categories;
 import io.github.mianalysis.mia.module.Category;
@@ -40,6 +41,7 @@ import io.github.mianalysis.mia.object.system.Status;
 import io.github.mianalysis.mia.object.units.SpatialUnit;
 import io.github.mianalysis.mia.process.math.Indexer;
 import net.imagej.ImageJ;
+import net.imagej.patcher.LegacyInjector;
 
 @Plugin(type = Module.class, priority = Priority.LOW, visible = true)
 public class FitAlphaSurface extends CoreMATLABModule {
@@ -51,15 +53,24 @@ public class FitAlphaSurface extends CoreMATLABModule {
     public static final String ALPHA_RADIUS = "Alpha radius";
     public static final String MEASUREMENT_MODE = "Measurement mode";
     
+    static {
+        LegacyInjector.preinit();
+    }
+    
     public static void main(String[] args) {
-        // Creating a new instance of ImageJ
-        new ij.ImageJ();
+        try {
+            LegacyInjector.preinit();
+        } catch (Exception e) {
+        }
 
-        // Launching MIA
-        new ImageJ ().command().run("io.github.mianalysis.mia.MIA", false);
+        try {
+            new ij.ImageJ();
+            new ImageJ().command().run("io.github.mianalysis.mia.MIA_", false);
+            AvailableModules.addModuleName(FitActiveContour.class);
 
-        // Adding the current module to MIA's list of available modules.
-        AvailableModules.addModuleName(FitAlphaSurface.class);
+        } catch (Exception e) {
+            MIA.log.writeError(e);
+        }
 
     }
 

@@ -1,16 +1,8 @@
 /*
  * MATLAB Compiler: 8.6 (R2023a)
- * Date: Sat Aug  5 01:24:45 2023
+ * Date: Tue Jun 17 13:00:40 2025
  * Arguments: 
- * "-B""macro_default""-W""java:MIA_MATLAB_Core,AlphaShapeFitter""-T""link:lib""-d""F:\\Java 
- * Projects\\mia-matlab\\MATLAB\\MIA_MATLAB\\for_testing""class{AlphaShapeFitter:F:\\Java 
- * Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface.m,F:\\Java 
- * Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface2D.m,F:\\Java 
- * Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurface3D.m,F:\\Java 
- * Projects\\mia-matlab\\MATLAB\\AlphaShape\\fitAlphaSurfaceAuto.m,F:\\Java 
- * Projects\\mia-matlab\\MATLAB\\StackMatcher\\matchImageInStack.m}""class{StackSorter:F:\\Java 
- * Projects\\mia-matlab\\MATLAB\\SortStack\\getOptimisedOrder.m}""class{StackMatcher:F:\\Java 
- * Projects\\mia-matlab\\MATLAB\\StackMatcher\\matchImageInStack.m}"
+ * "-B""macro_default""-W""java:MIA_MATLAB_Core,AlphaShapeFitter""-T""link:lib""-d""/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/MIA_MATLAB/for_testing""class{AlphaShapeFitter:/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface.m,/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface2D.m,/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurface3D.m,/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/AlphaShape/fitAlphaSurfaceAuto.m,/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/StackMatcher/matchImageInStack.m}""class{StackSorter:/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/SortStack/getOptimisedOrder.m}""class{StackMatcher:/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/StackMatcher/matchImageInStack.m}""class{ActiveContourFitter:/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/ActiveContours/fitActiveContour.m}"
  */
 
 package MIA_MATLAB_Core;
@@ -24,7 +16,7 @@ import java.io.Serializable;
  * The <code>StackMatcher</code> class provides a Java interface to MATLAB functions. 
  * The interface is compiled from the following files:
  * <pre>
- *  F:\\Java Projects\\mia-matlab\\MATLAB\\StackMatcher\\matchImageInStack.m
+ *  /Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/StackMatcher/matchImageInStack.m
  * </pre>
  * The {@link #dispose} method <b>must</b> be called on a <code>StackMatcher</code> 
  * instance when it is no longer needed to ensure that native resources allocated by this 

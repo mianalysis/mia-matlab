@@ -1,9 +1,9 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="3482601587" file="/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/MIA_MATLAB.prj" location="/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB" name="MIA_MATLAB" preferred-package-location="/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/F:\Java Projects\MIA_MATLAB\MATLAB\MIA_MATLAB\for_redistribution" target="target.ezdeploy.library" target-name="Library Compiler">
+  <configuration build-checksum="120049684" file="/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/MIA_MATLAB.prj" location="/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB" name="MIA_MATLAB" preferred-package-location="/Users/sc13967/Documents/Programming/Java/mia-matlab/MATLAB/MIA_MATLAB/for_redistribution" preferred-package-type="package.type.app" target="target.ezdeploy.library" target-name="Library Compiler">
     <param.appname>MIA_MATLAB_Core</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.4</param.version>
+    <param.version>1.5</param.version>
     <param.authnamewatermark>Stephen Cross</param.authnamewatermark>
     <param.email>stephen.cross@bristol.ac.uk</param.email>
     <param.company>University of Bristol</param.company>
@@ -102,6 +102,7 @@ ${DYLD_LIBRARY_PATH}:MR/R2023a/runtime/maci64:MR/R2023a/sys/os/maci64:MR/R2023a/
       <param.cpp.api />
     </unset>
     <fileset.exports>
+      <file>${PROJECT_ROOT}/ActiveContours/fitActiveContour.m</file>
       <file>${PROJECT_ROOT}/AlphaShape/fitAlphaSurface.m</file>
       <file>${PROJECT_ROOT}/AlphaShape/fitAlphaSurface2D.m</file>
       <file>${PROJECT_ROOT}/AlphaShape/fitAlphaSurface3D.m</file>
@@ -123,6 +124,9 @@ ${DYLD_LIBRARY_PATH}:MR/R2023a/runtime/maci64:MR/R2023a/sys/os/maci64:MR/R2023a/
         </entity.class>
         <entity.class name="StackMatcher">
           <file>${PROJECT_ROOT}/StackMatcher/matchImageInStack.m</file>
+        </entity.class>
+        <entity.class name="ActiveContourFitter">
+          <file>${PROJECT_ROOT}/ActiveContours/fitActiveContour.m</file>
         </entity.class>
       </entity.package>
     </fileset.classes>
@@ -149,7 +153,7 @@ ${DYLD_LIBRARY_PATH}:MR/R2023a/runtime/maci64:MR/R2023a/sys/os/maci64:MR/R2023a/
       <vista>false</vista>
       <linux>false</linux>
       <solaris>false</solaris>
-      <osver>13.5</osver>
+      <osver>15.5</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>maci64</arch>

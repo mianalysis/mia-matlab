@@ -159,7 +159,7 @@
         <dependency>
             <groupId>wbif.sjx</groupId>
             <artifactId>MIA_MATLAB_Core</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
             <scope>compile</scope>
         </dependency>
 
