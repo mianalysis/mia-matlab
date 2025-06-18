@@ -4,7 +4,7 @@
 
     <groupId>io.github.mianalysis</groupId>
     <artifactId>mia-matlab</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <packaging>jar</packaging>
     <name>MIA-MATLAB</name>
     <url>https://github.com/mianalysis/mia-matlab</url>
@@ -149,12 +149,12 @@
             <scope>${scp}</scope>
         </dependency>
 
-        <dependency>
+        <!-- <dependency>
             <groupId>io.github.mianalysis</groupId>
             <artifactId>mia-plugin</artifactId>
             <version>1.7.0</version>
             <scope>${scp}</scope>
-        </dependency>
+        </dependency> -->
 
         <dependency>
             <groupId>wbif.sjx</groupId>
