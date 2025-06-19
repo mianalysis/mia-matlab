@@ -6,7 +6,7 @@ import org.scijava.plugin.Plugin;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
-import MIA_MATLAB_Core.StackSorter;
+import StackSorter.StackSorter;
 import ij.ImagePlus;
 import ij.ImageStack;
 import io.github.mianalysis.mia.MIA;

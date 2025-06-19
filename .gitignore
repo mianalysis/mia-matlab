@@ -8,4 +8,6 @@ target/site/*
 .idea/libraries/
 
 MATLAB/MIA-MATLAB/*
+MATLAB/JavaPackage*
+MATLAB/resources/*
 

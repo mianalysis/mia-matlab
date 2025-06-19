@@ -7,7 +7,7 @@ import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWLogicalArray;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
-import MIA_MATLAB_Core.ActiveContourFitter;
+import ActiveContourFitter.ActiveContourFitter;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;

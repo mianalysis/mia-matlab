@@ -6,7 +6,7 @@ import org.scijava.plugin.Plugin;
 import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 
-import MIA_MATLAB_Core.StackMatcher;
+import StackMatcher.StackMatcher;
 import ij.ImagePlus;
 import io.github.mianalysis.mia.MIA;
 import io.github.mianalysis.mia.module.AvailableModules;

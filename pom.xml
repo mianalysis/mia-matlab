@@ -157,9 +157,30 @@
         </dependency> -->
 
         <dependency>
-            <groupId>wbif.sjx</groupId>
-            <artifactId>MIA_MATLAB_Core</artifactId>
-            <version>1.5</version>
+            <groupId>io.github.mianalysis</groupId>
+            <artifactId>ActiveContourFitter</artifactId>
+            <version>1.6</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.mianalysis</groupId>
+            <artifactId>AlphaShapeFitter</artifactId>
+            <version>1.6</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.mianalysis</groupId>
+            <artifactId>StackSorter</artifactId>
+            <version>1.6</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.mianalysis</groupId>
+            <artifactId>StackMatcher</artifactId>
+            <version>1.6</version>
             <scope>compile</scope>
         </dependency>
 

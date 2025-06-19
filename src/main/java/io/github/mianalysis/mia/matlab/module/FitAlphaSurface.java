@@ -7,7 +7,7 @@ import com.mathworks.toolbox.javabuilder.MWException;
 import com.mathworks.toolbox.javabuilder.MWNumericArray;
 import com.mathworks.toolbox.javabuilder.MWStructArray;
 
-import MIA_MATLAB_Core.AlphaShapeFitter;
+import AlphaShapeFitter.AlphaShapeFitter;
 import io.github.mianalysis.mia.MIA;
 import io.github.mianalysis.mia.module.AvailableModules;
 import io.github.mianalysis.mia.module.Categories;
